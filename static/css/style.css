@@ -1231,3 +1231,13 @@ h6 {
   font-size: 13px;
   color: #012970;
 }
+
+
+.errorlist {
+  list-style: none;
+  margin: 0.5rem 0;
+  padding: 0;
+  color: #d6000b;
+  width: 100%;
+  font-size: 0.875em;
+}
