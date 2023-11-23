@@ -16,16 +16,15 @@ def ticket_details(request, pk):
 
 
 def create_ticket(request):
-    # default_priority = TicketPriority(priority=2)
-    # default_status = TicketStatus(status=1)
-    # print(default_status)
+    default_priority = TicketPriority.objects.get(priority=2)
+    default_status = TicketStatus.objects.get(status=1)
 
     if request.method == "POST":
         form = TicketForm(request.POST)
         if form.is_valid():
             ticket = form.save(commit=False)
-            # ticket.status = default_status
-            # ticket.priority_id = default_priority
+            ticket.status = default_status
+            ticket.priority_id = default_priority
             ticket.save()
             return redirect("dashboard")
     else:
