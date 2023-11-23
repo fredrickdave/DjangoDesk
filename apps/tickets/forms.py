@@ -16,4 +16,10 @@ class TicketForm(ModelForm):
             "issue_type": forms.Select(attrs={"class": "form-control"}),
         }
 
+        labels = {
+            "ticket_summary": "Ticket Summary",
+            "description": "Description",
+            "issue_type": "Issue Type",
+        }
+
         error_class = "invalid-feedback"
