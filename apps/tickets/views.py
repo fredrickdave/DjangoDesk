@@ -1,20 +1,23 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import HttpResponse, redirect, render
 
 from .forms import TicketForm
 from .models import Ticket, TicketPriority, TicketStatus
 
 
-# Create your views here.
+@login_required
 def index(request):
     return HttpResponse("Tickets Module")
 
 
+@login_required
 def ticket_details(request, pk):
     selected_ticket = Ticket.objects.get(id=pk)
     context = {"selected_ticket": selected_ticket, "num": range(50)}
     return render(request=request, template_name="tickets/ticket-detail.html", context=context)
 
 
+@login_required
 def create_ticket(request):
     default_priority = TicketPriority.objects.get(priority=2)
     default_status = TicketStatus.objects.get(status=1)
