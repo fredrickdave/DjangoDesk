@@ -5,10 +5,38 @@
 {% block title %}Ticket Details{% endblock title %} 
 
 {% block content %}
+<main id="main" class="main">
+        <div class="pagetitle">
+            <h1>Dashboard</h1>
+            <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url "dashboard" %}">Home</a></li>
+                <li class="breadcrumb-item active">Dashboard</li>
+            </ol>
+            </nav>
+        </div>
+        <!-- End Page Title -->
 
-        {% for i in num %}
-                <p>{{ selected_ticket.ticket_summary }}</p>
-                <p>{{ selected_ticket.description }}</p>
-                <p>{{ selected_ticket.assigned_agent }}</p>
-        {% endfor %}
+        <section class="section">
+            <div class="row">
+
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Ticket Details</h5>
+                            {% for i in num %}
+                            <p>{{ selected_ticket.ticket_summary }}</p>
+                            <p>{{ selected_ticket.description }}</p>
+                            <p>{{ selected_ticket.assigned_agent }}</p>
+                    {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+    <!-- End #main -->
+
 {% endblock content %}
