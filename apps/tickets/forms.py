@@ -8,16 +8,16 @@ class TicketForm(ModelForm):
     # https://docs.djangoproject.com/en/4.2/topics/forms/modelforms/#overriding-the-default-fields
     class Meta:
         model = Ticket
-        fields = ["ticket_summary", "issue_type", "description"]
+        fields = ["summary", "issue_type", "description"]
 
         widgets = {
-            "ticket_summary": forms.TextInput(attrs={"class": "form-control"}),
+            "summary": forms.TextInput(attrs={"class": "form-control"}),
             "description": forms.Textarea(attrs={"class": "form-control"}),
             "issue_type": forms.Select(attrs={"class": "form-control"}),
         }
 
         labels = {
-            "ticket_summary": "Ticket Summary",
+            "summary": "Ticket Summary",
             "description": "Description",
             "issue_type": "Issue Type",
         }

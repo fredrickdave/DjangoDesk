@@ -1,0 +1,56 @@
+{% extends "base.html" %} 
+
+{% load static %}
+
+{% block title %}My Tickets{% endblock title %} 
+
+{% block content %}
+    <main id="main" class="main">
+        <div class="pagetitle">
+            <h1>Dashboard</h1>
+            <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url "dashboard" %}">Home</a></li>
+                <li class="breadcrumb-item active">Tickets</li>
+            </ol>
+            </nav>
+        </div>
+        <!-- End Page Title -->
+
+        <section class="section">
+            <div class="row">
+
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">All Tickets</h5>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Summary</th>
+                                    <th scope="col">Description</th>
+                                    <th scope="col">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for ticket in tickets %}
+                                        <tr>
+                                            <th scope="row"><a href="{% url "ticket-details" ticket.ticket_number %}">{{ticket.ticket_number}}</a></th>
+                                            <td>{{ticket.summary}}</td>
+                                            <td>{{ticket.description}}</td>
+                                            <td>{{ticket.status}}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                              </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+    <!-- End #main -->
+{% endblock content %}

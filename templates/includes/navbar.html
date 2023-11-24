@@ -3,7 +3,7 @@
 <!-- ======= Header ======= -->
 <header id="header" class="header fixed-top d-flex align-items-center">
   <div class="d-flex align-items-center justify-content-between">
-    <a href="index.html" class="logo d-flex align-items-center">
+    <a href="{% url "dashboard" %}" class="logo d-flex align-items-center">
       <img src="{% static "img/logo.png" %}" alt="logo"/>
       <span class="d-none d-lg-block">DjangoDesk</span>
     </a>
@@ -120,7 +120,7 @@
 <aside id="sidebar" class="sidebar">
   <ul class="sidebar-nav" id="sidebar-nav">
     <li class="nav-item">
-      <a class="nav-link" href="index.html">
+      <a class="nav-link" href="{% url "dashboard" %}">
         <i class="bi bi-grid"></i>
         <span>Dashboard</span>
       </a>
@@ -128,7 +128,7 @@
     <!-- End Dashboard Nav -->
 
     <li class="nav-item">
-      <a class="nav-link collapsed" href="index.html">
+      <a class="nav-link collapsed" href="{% url "all-tickets" %}">
         <i class="bi bi-ticket"></i>
         <span>Tickets</span>
       </a>

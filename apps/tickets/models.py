@@ -4,7 +4,6 @@ from django.utils import timezone
 from ..users.models import User
 
 
-# Create your models here.
 class BaseModel(models.Model):
     created_at = models.DateTimeField(db_index=True, default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
@@ -12,6 +11,29 @@ class BaseModel(models.Model):
     # https://docs.djangoproject.com/en/4.2/topics/db/models/#abstract-base-classes
     class Meta:
         abstract = True
+
+
+class Reference(models.Model):
+    """Generate unique reference numbers for other models.
+
+    The only purpose of this model is to generate unique reference numbers.
+    """
+
+    # Django models need at least 1 field
+    created_date = models.DateTimeField(auto_now_add=True)
+
+    @classmethod
+    def generate(cls, prefix: str) -> str:
+        """Generate a unique reference number prefixed with the provided prefix.
+
+        For example, you could generate an invoice number as follows:
+
+        Reference.generate(prefix="INV") # INV-0000001 etc.
+        """
+
+        instance = cls.objects.create()
+        suffix = f"{instance.pk}".zfill(7)
+        return f"{prefix}-{suffix}"
 
 
 class TicketType(BaseModel):
@@ -72,8 +94,8 @@ class TicketComment(BaseModel):
 
 
 class Ticket(BaseModel):
-    # ticket_uuid =
-    ticket_summary = models.CharField(max_length=100, null=True)
+    ticket_number = models.CharField(max_length=25, unique=True, db_index=True)
+    summary = models.CharField(max_length=100, null=True)
     description = models.TextField()
     issue_type = models.ForeignKey(TicketType, null=True, blank=True, on_delete=models.SET_NULL, related_name="tickets")
     assigned_agent = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name="agent")
@@ -88,4 +110,4 @@ class Ticket(BaseModel):
     completed_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self) -> str:
-        return self.ticket_summary
+        return self.summary
