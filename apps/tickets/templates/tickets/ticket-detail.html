@@ -11,7 +11,8 @@
             <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{% url "dashboard" %}">Home</a></li>
-                <li class="breadcrumb-item active">Dashboard</li>
+                <li class="breadcrumb-item"><a href="{% url "all-tickets" %}">Tickets</a></li>
+                <li class="breadcrumb-item active">{{selected_ticket.ticket_number}}</li>
             </ol>
             </nav>
         </div>

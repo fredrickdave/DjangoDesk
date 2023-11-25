@@ -120,7 +120,7 @@
 <aside id="sidebar" class="sidebar">
   <ul class="sidebar-nav" id="sidebar-nav">
     <li class="nav-item">
-      <a class="nav-link" href="{% url "dashboard" %}">
+      <a class="nav-link {% if page != "dashboard" %}collapsed{% endif %}" href="{% url "dashboard" %}">
         <i class="bi bi-grid"></i>
         <span>Dashboard</span>
       </a>
@@ -128,7 +128,7 @@
     <!-- End Dashboard Nav -->
 
     <li class="nav-item">
-      <a class="nav-link collapsed" href="{% url "all-tickets" %}">
+      <a class="nav-link {% if page != "all-tickets" %}collapsed{% endif %}" href="{% url "all-tickets" %}">
         <i class="bi bi-ticket"></i>
         <span>Tickets</span>
       </a>

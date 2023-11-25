@@ -7,5 +7,5 @@ from ..users.models import User
 @login_required
 def dashboard(request):
     users = User.objects.all()
-    context = {"users": users, "current_user": request.user}
+    context = {"users": users, "current_user": request.user, "page": "dashboard"}
     return render(request=request, template_name="core/dashboard.html", context=context)

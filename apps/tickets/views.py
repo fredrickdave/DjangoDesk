@@ -8,7 +8,8 @@ from .models import Reference, Ticket, TicketPriority, TicketStatus
 @login_required
 def all_tickets(request):
     all_tickets = Ticket.objects.all()
-    context = {"tickets": all_tickets}
+    context = {"tickets": all_tickets, "page": "all-tickets"}
+    print(context["page"] == "all-tickets")
     return render(request=request, template_name="tickets/all-tickets.html", context=context)
 
 

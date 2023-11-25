@@ -60,38 +60,30 @@
                     <div class="card-body">
     
                       <div class="pt-4 pb-2">
-                        <h5 class="card-title text-center pb-0 fs-4">Login to Your Account</h5>
-                        <p class="text-center small">Enter your email & password to login</p>
+                        <h5 class="card-title text-center pb-0 fs-4">Create an Account</h5>
+                        <p class="text-center small">Enter your details to create account</p>
                       </div>
     
-                      <form method="POST" action="{% url "login" %}" class="row g-3 needs-validation" novalidate>
+                      <form method="POST" action="{% url "register" %}" class="row g-3 needs-validation" novalidate>
     
                         {% csrf_token %}
 
-                        {% for form_field in login_form %}
+                        {% for form_field in register_form %}
                             <div class="col-12">
                                 <label for="{{ form_field.auto_id }}" class="form-label">{{form_field.label}}</label>
                                 {{ form_field }}
                                 {{ form_field.errors }}
                             </div>
                         {% endfor %}
-    
-                        <div class="col-12">
-                          <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="remember" value="true" id="rememberMe">
-                            <label class="form-check-label" for="rememberMe">Remember me</label>
-                          </div>
+
+                        <div class="col-12 mt-4">                    
+                          <button class="btn btn-primary w-100" type="submit">Register</button>
                         </div>
+
                         <div class="col-12">
-                          
-                          
-                          <input type="hidden", name="next", value="{{ request.GET.next }}">
-                          
-                          <button class="btn btn-primary w-100" type="submit">Login</button>
+                          <p class="small mb-0">Already have an account? <a href="{% url "login" %}">Log in</a></p>
                         </div>
-                        <div class="col-12">
-                          <p class="small mb-0">Don't have account? <a href="{% url "register" %}">Create an account</a></p>
-                        </div>
+
                       </form>
     
                     </div>
