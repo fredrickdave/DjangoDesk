@@ -4,7 +4,8 @@ from django.shortcuts import redirect, render
 from django.utils.encoding import iri_to_uri
 from django.utils.http import url_has_allowed_host_and_scheme
 
-from .forms import LoginForm, RegisterForm
+from .forms import EditProfileForm, LoginForm, RegisterForm
+from .models import User
 
 
 def sign_in(request):
@@ -61,3 +62,10 @@ def register(request):
 
     context = {"register_form": register_form}
     return render(request=request, template_name="users/register.html", context=context)
+
+
+def profile(request, email):
+    edit_profile_form = EditProfileForm(instance=request.user)
+    user = User.objects.get(email=email)
+    context = {"user": user, "edit_profile_form": edit_profile_form}
+    return render(request=request, template_name="users/profile.html", context=context)

@@ -144,7 +144,7 @@
     <!-- End History Nav -->
 
     <li class="nav-item">
-      <a class="nav-link collapsed" href="index.html">
+      <a class="nav-link collapsed" href="{% url "profile" request.user.email %}">
         <i class="bi bi-person"></i>
         <span>Account</span>
       </a>
