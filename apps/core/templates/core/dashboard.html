@@ -3,65 +3,64 @@
 {% block title %}Dashboard{% endblock title %} 
 
 {% block content %}
-    <main id="main" class="main">
-        <div class="pagetitle">
-            <h1>Dashboard</h1>
-            <nav>
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{% url "dashboard" %}">Home</a></li>
-                <li class="breadcrumb-item active">Dashboard</li>
-            </ol>
-            </nav>
+    <div class="pagetitle">
+        <h1>Dashboard</h1>
+        <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url "dashboard" %}">Home</a></li>
+            <li class="breadcrumb-item active">Dashboard</li>
+        </ol>
+        </nav>
+    </div>
+    <!-- End Page Title -->
+
+    <section class="section">
+        <div class="row">
+            
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                        Welcome to the Dashboard page, {{ current_user.get_full_name }}!
+                        </h5>
+                        <ul class="list-unstyled">
+                        {% for user in users %}
+                        <li>{{ user.email }}</li>
+                        {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
-        <!-- End Page Title -->
 
-        <section class="section">
-            <div class="row">
-                
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">
-                            Welcome to the Dashboard page, {{ current_user.get_full_name }}!
-                            </h5>
-                            <ul class="list-unstyled">
-                            {% for user in users %}
-                            <li>{{ user.email }}</li>
-                            {% endfor %}
-                            </ul>
-                        </div>
+        <div class="row">
+
+            <div class="col-lg-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Open Tickets</h5>
+                        <ul class="list-unstyled">
+                            <li class="fs-3 fw-semibold">0</li>
+                        </ul>
                     </div>
                 </div>
             </div>
 
-            <div class="row">
-
-                <div class="col-lg-3">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Open Tickets</h5>
-                            <ul class="list-unstyled">
-                                <li class="fs-3 fw-semibold">0</li>
-                            </ul>
-                        </div>
+            <div class="col-lg-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Completed Tickets</h5>
+                        <ul class="list-unstyled">
+                            <li class="fs-3 fw-semibold">0</li>
+                        </ul>
                     </div>
                 </div>
-
-                <div class="col-lg-3">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Completed Tickets</h5>
-                            <ul class="list-unstyled">
-                                <li class="fs-3 fw-semibold">0</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
             </div>
 
-        </section>
+        </div>
 
-    </main>
-    <!-- End #main -->
+    </section>
+
+
+<!-- End #main -->
 {% endblock content %}

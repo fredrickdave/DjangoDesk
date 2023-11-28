@@ -1,5 +1,6 @@
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from django.shortcuts import HttpResponse, redirect, render
+from django.shortcuts import redirect, render
 from django.utils.encoding import iri_to_uri
 from django.utils.http import url_has_allowed_host_and_scheme
 
@@ -20,6 +21,7 @@ def sign_in(request):
             user = authenticate(username=username, password=password)
             if user:
                 login(request=request, user=user)
+                messages.success(request, "You have sucessfully logged in.")
                 next_url = request.POST.get("next")
 
                 # Check if "?next=" param is safe (not off-site).
@@ -28,6 +30,7 @@ def sign_in(request):
                     return redirect(to=next_url)
                 return redirect("dashboard")
             else:
+                messages.error(request=request, message="Incorrect Email or Password. Please try again.")
                 return redirect("login")
     else:
         login_form = LoginForm()
@@ -38,6 +41,7 @@ def sign_in(request):
 
 def sign_out(request):
     logout(request=request)
+    messages.success(request, "You have sucessfully logged out.")
     return redirect("login")
 
 
@@ -50,8 +54,8 @@ def register(request):
         register_form = RegisterForm(request.POST)
         if register_form.is_valid():
             register_form.save()
-            print("Registered")
-            return redirect("dashboard")
+            messages.success(request, "You are now registered. Log in using your registered Email and Password.")
+            return redirect("login")
     else:
         register_form = RegisterForm()
 

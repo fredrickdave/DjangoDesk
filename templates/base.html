@@ -43,8 +43,10 @@
     <!-- Navigation Section -->
     {% include "includes/navbar.html" %}
 
-    {% block content %}{% endblock content %}
-    
+    <main id="main" class="main">
+      {% include "includes/messages.html" %}
+      {% block content %}{% endblock content %}
+    </main>
 
 
     <!-- ======= Footer ======= -->
