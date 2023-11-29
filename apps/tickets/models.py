@@ -106,7 +106,7 @@ class Ticket(BaseModel):
     comments = models.ForeignKey(
         TicketComment, null=True, blank=True, on_delete=models.SET_NULL, related_name="tickets"
     )
-    created_by = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name="user")
+    created_by = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name="tickets")
     completed_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self) -> str:

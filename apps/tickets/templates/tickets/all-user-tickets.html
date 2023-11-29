@@ -30,6 +30,7 @@
                                 <th scope="col">Summary</th>
                                 <th scope="col">Description</th>
                                 <th scope="col">Status</th>
+                                <th scope="col">Created By</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -39,6 +40,7 @@
                                         <td>{{ticket.summary}}</td>
                                         <td>{{ticket.description}}</td>
                                         <td>{{ticket.status}}</td>
+                                        <td>{{ticket.created_by.get_full_name}}</td>
                                     </tr>
                                 {% endfor %}
                             </tbody>

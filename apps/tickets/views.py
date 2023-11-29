@@ -6,17 +6,17 @@ from .models import Reference, Ticket, TicketPriority, TicketStatus
 
 
 @login_required
-def all_tickets(request):
-    all_tickets = Ticket.objects.all()
+def all_user_tickets(request):
+    all_tickets = request.user.tickets.all()
     context = {"tickets": all_tickets, "page": "all-tickets"}
-    print(context["page"] == "all-tickets")
-    return render(request=request, template_name="tickets/all-tickets.html", context=context)
+    return render(request=request, template_name="tickets/all-user-tickets.html", context=context)
 
 
 @login_required
 def ticket_details(request, ticket_number):
     selected_ticket = Ticket.objects.get(ticket_number=ticket_number)
     context = {"selected_ticket": selected_ticket, "num": range(50)}
+    print(request.user.tickets.all())
     return render(request=request, template_name="tickets/ticket-detail.html", context=context)
 
 
@@ -29,6 +29,7 @@ def create_ticket(request):
         form = TicketForm(request.POST)
         if form.is_valid():
             ticket = form.save(commit=False)
+            ticket.created_by = request.user
             ticket.ticket_number = Reference.generate(prefix="INC")
             ticket.status = default_status
             ticket.priority_id = default_priority

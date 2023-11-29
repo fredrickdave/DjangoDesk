@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.utils.encoding import iri_to_uri
 from django.utils.http import url_has_allowed_host_and_scheme
@@ -42,7 +43,7 @@ def sign_in(request):
 
 def sign_out(request):
     logout(request=request)
-    messages.success(request, "You have sucessfully logged out.")
+    messages.success(request=request, message="You have sucessfully logged out.")
     return redirect("login")
 
 
@@ -55,7 +56,9 @@ def register(request):
         register_form = RegisterForm(request.POST)
         if register_form.is_valid():
             register_form.save()
-            messages.success(request, "You are now registered. Log in using your registered Email and Password.")
+            messages.success(
+                request=request, message="You are now registered. Log in using your registered Email and Password."
+            )
             return redirect("login")
     else:
         register_form = RegisterForm()
@@ -64,8 +67,14 @@ def register(request):
     return render(request=request, template_name="users/register.html", context=context)
 
 
-def profile(request, email):
-    edit_profile_form = EditProfileForm(instance=request.user)
-    user = User.objects.get(email=email)
-    context = {"user": user, "edit_profile_form": edit_profile_form}
+@login_required
+def profile(request):
+    if request.method == "POST":
+        edit_profile_form = EditProfileForm(request.POST, instance=request.user)
+        if edit_profile_form.is_valid():
+            edit_profile_form.save()
+            messages.success(request=request, message="You have successfully updated your profile details.")
+    else:
+        edit_profile_form = EditProfileForm(instance=request.user)
+    context = {"edit_profile_form": edit_profile_form}
     return render(request=request, template_name="users/profile.html", context=context)
