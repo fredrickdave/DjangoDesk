@@ -64,7 +64,7 @@ class CustomUserManager(BaseUserManager):
 class User(AbstractUser):
     username = None
     email = models.EmailField(unique=True)
-    avatar = ResizedImageField(null=True, size=[300, 300], keep_meta=False, upload_to="images")
+    avatar = ResizedImageField(null=True, blank=True, size=[300, 300], keep_meta=False, upload_to="images")
     about = models.TextField(max_length=1500, null=True, blank=True)
     role = models.ForeignKey(UserRole, null=True, blank=True, on_delete=models.SET_NULL, related_name="users")
     job = models.CharField(max_length=50, null=True, blank=True)
