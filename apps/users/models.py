@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 from django.utils import timezone
+from django_resized import ResizedImageField
 
 
 class BaseModel(models.Model):
@@ -13,18 +14,20 @@ class BaseModel(models.Model):
 
 
 class UserRole(BaseModel):
+    # https://docs.djangoproject.com/en/4.2/ref/models/fields/#choices
     class Role(models.IntegerChoices):
-        ADMIN = "1", "Administrator"
-        AGENT = "2", "Support Agent"
-        CUSTOMER = "3", "Customer"
+        ADMIN = 1, "Administrator"
+        AGENT = 2, "Support Agent"
+        CUSTOMER = 3, "Customer"
 
-    role = models.IntegerField(choices=Role.choices, null=True, blank=True)
+    role = models.IntegerField(choices=Role.choices, unique=True, null=True, blank=True)
 
     def __str__(self) -> str:
         # https://docs.djangoproject.com/en/4.2/ref/models/instances/#django.db.models.Model.get_FOO_display
         return self.get_role_display()
 
 
+# https://docs.djangoproject.com/en/4.2/topics/auth/customizing/#writing-a-manager-for-a-custom-user-model
 class CustomUserManager(BaseUserManager):
     """
     Custom user model manager where email is the unique identifiers
@@ -59,16 +62,15 @@ class CustomUserManager(BaseUserManager):
 
 
 class User(AbstractUser):
-    # https://docs.djangoproject.com/en/4.2/ref/models/fields/#choices
-    class Role(models.TextChoices):
-        ADMIN = "Admin", "Administrator"
-        AGENT = "Agent", "Support Agent"
-        CUSTOMER = "Customer", "Customer"
-
     username = None
     email = models.EmailField(unique=True)
-    # role = models.TextField(choices=Role.choices, null=True, blank=True)
+    avatar = ResizedImageField(null=True, size=[300, 300], keep_meta=False, upload_to="images")
     role = models.ForeignKey(UserRole, null=True, blank=True, on_delete=models.SET_NULL, related_name="users")
+    job = models.CharField(max_length=50, null=True, blank=True)
+    department = models.CharField(max_length=50, null=True, blank=True)
+    company = models.CharField(max_length=50, null=True, blank=True)
+    phone = models.CharField(max_length=50, null=True, blank=True)
+    linkedin = models.URLField(max_length=500, null=True, blank=True)
 
     # https://docs.djangoproject.com/en/4.2/topics/auth/customizing/#django.contrib.auth.models.CustomUser
     USERNAME_FIELD = "email"
