@@ -56,7 +56,12 @@ INSTALLED_APPS = [
     "apps.core",
     "apps.users",
     "apps.tickets",
+    # https://docs.djangoproject.com/en/4.2/ref/forms/renderers/#overriding-built-in-widget-templates
+    "django.forms",
 ]
+
+# https://docs.djangoproject.com/en/4.2/ref/forms/renderers/#templatessetting
+FORM_RENDERER = "django.forms.renderers.TemplatesSetting"
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",

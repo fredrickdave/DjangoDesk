@@ -43,13 +43,26 @@ class RegisterForm(UserCreationForm):
         }
 
 
+class CustomClearableFileInput(forms.ClearableFileInput):
+    clear_checkbox_label = "Remove profile image"
+    input_text = "Change profile image"
+    template_name = "users/includes/clearable_file_input.html"
+
+
 class EditProfileForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ["first_name", "last_name", "email"]
+        fields = ["avatar", "first_name", "last_name", "about", "job", "department", "company", "phone", "linkedin"]
 
         widgets = {
+            "avatar": CustomClearableFileInput(attrs={"class": "form-control"}),
             "first_name": forms.TextInput(attrs={"class": "form-control"}),
             "last_name": forms.TextInput(attrs={"class": "form-control"}),
             "email": forms.EmailInput(attrs={"class": "form-control"}),
+            "about": forms.Textarea(attrs={"class": "form-control", "style": "height:100px"}),
+            "job": forms.TextInput(attrs={"class": "form-control"}),
+            "department": forms.TextInput(attrs={"class": "form-control"}),
+            "company": forms.TextInput(attrs={"class": "form-control"}),
+            "phone": forms.TextInput(attrs={"class": "form-control"}),
+            "linkedin": forms.URLInput(attrs={"class": "form-control"}),
         }

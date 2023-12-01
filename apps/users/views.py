@@ -70,7 +70,7 @@ def register(request):
 @login_required
 def profile(request):
     if request.method == "POST":
-        edit_profile_form = EditProfileForm(request.POST, instance=request.user)
+        edit_profile_form = EditProfileForm(data=request.POST, files=request.FILES, instance=request.user)
         if edit_profile_form.is_valid():
             edit_profile_form.save()
             messages.success(request=request, message="You have successfully updated your profile details.")

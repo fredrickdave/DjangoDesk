@@ -1,0 +1,12 @@
+<div class="form-check">
+
+{% if not widget.required %}
+<input class="form-check-input" type="checkbox" name="{{ widget.checkbox_name }}" id="{{ widget.checkbox_id }}"{% if widget.attrs.disabled %} disabled{% endif %}>
+<div id="{{ widget.widget.checkbox_name }}Help" class="form-text">{{ widget.clear_checkbox_label }}:</div>
+{% comment %} <label class="form-check-label" for="{{ widget.checkbox_id }}">{{ widget.clear_checkbox_label }}</label> {% endcomment %}
+{% endif %}
+
+</div>
+
+<div id="{{ widget.name }}Help" class="form-text">{{ widget.input_text }}:</div>
+<input type="{{ widget.type }}" name="{{ widget.name }}"{% include "django/forms/widgets/attrs.html" %}>
