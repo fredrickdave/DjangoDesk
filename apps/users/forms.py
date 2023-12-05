@@ -45,7 +45,7 @@ class RegisterForm(UserCreationForm):
 
 class CustomClearableFileInput(forms.ClearableFileInput):
     clear_checkbox_label = "Remove profile image"
-    input_text = "Change profile image"
+    input_text = "Add/Change profile image"
     template_name = "users/includes/clearable_file_input.html"
 
 

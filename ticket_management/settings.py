@@ -58,6 +58,8 @@ INSTALLED_APPS = [
     "apps.tickets",
     # https://docs.djangoproject.com/en/4.2/ref/forms/renderers/#overriding-built-in-widget-templates
     "django.forms",
+    # https://github.com/un1t/django-cleanup
+    "django_cleanup.apps.CleanupConfig",
 ]
 
 # https://docs.djangoproject.com/en/4.2/ref/forms/renderers/#templatessetting
