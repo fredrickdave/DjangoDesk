@@ -5,7 +5,7 @@ from django.shortcuts import redirect, render
 from django.utils.encoding import iri_to_uri
 from django.utils.http import url_has_allowed_host_and_scheme
 
-from .forms import EditProfileForm, LoginForm, RegisterForm
+from .forms import ChangePasswordForm, EditProfileForm, LoginForm, RegisterForm
 from .models import User
 
 
@@ -53,7 +53,7 @@ def register(request):
         return redirect("dashboard")
 
     if request.method == "POST":
-        register_form = RegisterForm(request.POST)
+        register_form = RegisterForm(data=request.POST)
         if register_form.is_valid():
             register_form.save()
             messages.success(
@@ -69,12 +69,30 @@ def register(request):
 
 @login_required
 def profile(request):
+    edit_profile_form = EditProfileForm(instance=request.user)
+    change_password_form = ChangePasswordForm(user=request.user)
+
     if request.method == "POST":
         edit_profile_form = EditProfileForm(data=request.POST, files=request.FILES, instance=request.user)
         if edit_profile_form.is_valid():
             edit_profile_form.save()
             messages.success(request=request, message="You have successfully updated your profile details.")
-    else:
-        edit_profile_form = EditProfileForm(instance=request.user)
-    context = {"edit_profile_form": edit_profile_form}
+    context = {"edit_profile_form": edit_profile_form, "change_password_form": change_password_form}
+    return render(request=request, template_name="users/profile.html", context=context)
+
+
+@login_required
+def change_password(request):
+    edit_profile_form = EditProfileForm(instance=request.user)
+    change_password_form = ChangePasswordForm(user=request.user)
+
+    if request.method == "POST":
+        change_password_form = ChangePasswordForm(user=request.user, data=request.POST)
+        if change_password_form.is_valid():
+            change_password_form.save()
+            messages.success(request=request, message="You have successfully changed your password.")
+        else:
+            messages.success(request=request, message="Password change failed. Please try again.")
+
+    context = {"edit_profile_form": edit_profile_form, "change_password_form": change_password_form}
     return render(request=request, template_name="users/profile.html", context=context)

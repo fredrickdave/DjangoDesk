@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import PasswordChangeForm, UserCreationForm
 
 from .models import User
 
@@ -27,11 +27,13 @@ class RegisterForm(UserCreationForm):
     # fields from the User model and are "custom" fields from the UserCreationForm
     password1 = forms.CharField(
         label="Password",
-        widget=forms.PasswordInput(attrs={"class": "form-control", "type": "password", "align": "center"}),
+        widget=forms.PasswordInput(attrs={"class": "form-control"}),
+        strip=False,
     )
     password2 = forms.CharField(
         label="Confirm password",
-        widget=forms.PasswordInput(attrs={"class": "form-control", "type": "password", "align": "center"}),
+        widget=forms.PasswordInput(attrs={"class": "form-control", "autocomplete": "new-password"}),
+        strip=False,
     )
 
     class Meta:
@@ -39,8 +41,30 @@ class RegisterForm(UserCreationForm):
         fields = ["email"]
 
         widgets = {
-            "email": forms.EmailInput(attrs={"class": "form-control"}),
+            "email": forms.EmailInput(attrs={"class": "form-control", "autocomplete": "new-password"}),
         }
+
+
+class ChangePasswordForm(PasswordChangeForm):
+    old_password = forms.CharField(
+        label="Old password",
+        strip=False,
+        widget=forms.PasswordInput(
+            attrs={"class": "form-control", "autocomplete": "current-password", "autofocus": True}
+        ),
+    )
+
+    new_password1 = forms.CharField(
+        label="New password",
+        widget=forms.PasswordInput(attrs={"class": "form-control", "autocomplete": "new-password"}),
+        strip=False,
+    )
+
+    new_password2 = forms.CharField(
+        label="New password confirmation",
+        strip=False,
+        widget=forms.PasswordInput(attrs={"class": "form-control", "autocomplete": "new-password"}),
+    )
 
 
 class CustomClearableFileInput(forms.ClearableFileInput):
