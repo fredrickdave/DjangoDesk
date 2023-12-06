@@ -92,7 +92,7 @@ def change_password(request):
             change_password_form.save()
             messages.success(request=request, message="You have successfully changed your password.")
         else:
-            messages.success(request=request, message="Password change failed. Please try again.")
+            messages.error(request=request, message="Password change failed. Please try again.")
 
     context = {"edit_profile_form": edit_profile_form, "change_password_form": change_password_form}
     return render(request=request, template_name="users/profile.html", context=context)

@@ -30,8 +30,15 @@
             class="rounded-circle"
           />
           {% endif %}
-          <h2>{{request.user.get_full_name}}</h2>
+
+          {% if request.user.get_full_name %}<h2>
+            {{request.user.get_full_name}}</h2>
+          {% endif %}
+          
+          {% if request.user.job %}
           <h3>{{request.user.job}}</h3>
+          {% endif %}
+
           <div class="social-links mt-2">
             {% if request.user.linkedin %}
             <a href="{{ request.user.linkedin }}" class="linkedin"><i class="bi bi-linkedin"></i></a>
@@ -116,7 +123,7 @@
             <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
               <!-- Profile Edit Form -->
               <!-- No need to add action to form if we're redirecting to the same current URL -->
-              <form method="POST" enctype="multipart/form-data">
+              <form method="POST" action="{% url "profile" %}" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="row mb-3">
                   <label
