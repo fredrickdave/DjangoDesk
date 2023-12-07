@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.utils.encoding import iri_to_uri
@@ -82,6 +82,8 @@ def profile(request):
             change_password_form = ChangePasswordForm(user=request.user, data=request.POST)
             if change_password_form.is_valid():
                 change_password_form.save()
+                # https://docs.djangoproject.com/en/5.0/topics/auth/default/#django.contrib.auth.update_session_auth_hash
+                update_session_auth_hash(request=request, user=change_password_form.user)
                 messages.success(request=request, message="You have successfully changed your password.")
             else:
                 messages.error(request=request, message="Password change failed. Please try again.")
