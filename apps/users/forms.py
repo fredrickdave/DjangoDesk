@@ -23,6 +23,7 @@ class LoginForm(forms.Form):
 
 
 class RegisterForm(UserCreationForm):
+    # https://docs.djangoproject.com/en/5.0/topics/auth/default/#django.contrib.auth.forms.UserCreationForm
     # Redefined password fields to add css class. Meta.widgets does not work on these since these are not
     # fields from the User model and are "custom" fields from the UserCreationForm
     password1 = forms.CharField(
@@ -46,6 +47,8 @@ class RegisterForm(UserCreationForm):
 
 
 class ChangePasswordForm(PasswordChangeForm):
+    # https://docs.djangoproject.com/en/5.0/topics/auth/default/#django.contrib.auth.forms.PasswordChangeForm
+    # https://docs.djangoproject.com/en/5.0/topics/auth/default/#django.contrib.auth.update_session_auth_hash
     old_password = forms.CharField(
         label="Old password",
         strip=False,
@@ -67,6 +70,29 @@ class ChangePasswordForm(PasswordChangeForm):
     )
 
 
+class ChangeEmailForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        if kwargs["request"] is not None:
+            self.request = kwargs.pop("request")
+        super().__init__(*args, **kwargs)
+
+    def clean_email(self):
+        data = self.cleaned_data["email"]
+
+        if data == self.request.user.email:
+            raise forms.ValidationError("You entered the same email you are already using.")
+
+        return data
+
+    class Meta:
+        model = User
+        fields = ["email"]
+
+        widgets = {
+            "email": forms.EmailInput(attrs={"class": "form-control"}),
+        }
+
+
 class CustomClearableFileInput(forms.ClearableFileInput):
     clear_checkbox_label = "Remove profile image"
     input_text = "Add/Change profile image"
@@ -82,7 +108,6 @@ class EditProfileForm(forms.ModelForm):
             "avatar": CustomClearableFileInput(attrs={"class": "form-control"}),
             "first_name": forms.TextInput(attrs={"class": "form-control"}),
             "last_name": forms.TextInput(attrs={"class": "form-control"}),
-            "email": forms.EmailInput(attrs={"class": "form-control"}),
             "about": forms.Textarea(attrs={"class": "form-control", "style": "height:100px"}),
             "job": forms.TextInput(attrs={"class": "form-control"}),
             "department": forms.TextInput(attrs={"class": "form-control"}),
