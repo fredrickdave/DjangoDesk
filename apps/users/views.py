@@ -73,53 +73,26 @@ def profile(request):
     change_email_form = ChangeEmailForm(instance=request.user, request=request)
 
     if request.method == "POST":
-        edit_profile_form = EditProfileForm(data=request.POST, files=request.FILES, instance=request.user)
-        if edit_profile_form.is_valid():
-            edit_profile_form.save()
-            messages.success(request=request, message="You have successfully updated your profile details.")
-    context = {
-        "edit_profile_form": edit_profile_form,
-        "change_email_form": change_email_form,
-        "change_password_form": change_password_form,
-    }
-    return render(request=request, template_name="users/profile.html", context=context)
+        if "update-profile" in request.POST:
+            edit_profile_form = EditProfileForm(data=request.POST, files=request.FILES, instance=request.user)
+            if edit_profile_form.is_valid():
+                edit_profile_form.save()
+                messages.success(request=request, message="You have successfully updated your profile details.")
+        elif "update-password" in request.POST:
+            change_password_form = ChangePasswordForm(user=request.user, data=request.POST)
+            if change_password_form.is_valid():
+                change_password_form.save()
+                messages.success(request=request, message="You have successfully changed your password.")
+            else:
+                messages.error(request=request, message="Password change failed. Please try again.")
+        elif "update-email" in request.POST:
+            change_email_form = ChangeEmailForm(instance=request.user, data=request.POST, request=request)
+            if change_email_form.is_valid():
+                change_email_form.save()
+                messages.success(request=request, message="You have successfully changed your email.")
+            else:
+                messages.error(request=request, message="Email change failed. Please try again.")
 
-
-@login_required
-def change_password(request):
-    edit_profile_form = EditProfileForm(instance=request.user)
-    change_password_form = ChangePasswordForm(user=request.user)
-    change_email_form = ChangeEmailForm(instance=request.user, request=request)
-
-    if request.method == "POST":
-        change_password_form = ChangePasswordForm(user=request.user, data=request.POST)
-        if change_password_form.is_valid():
-            change_password_form.save()
-            messages.success(request=request, message="You have successfully changed your password.")
-        else:
-            messages.error(request=request, message="Password change failed. Please try again.")
-
-    context = {
-        "edit_profile_form": edit_profile_form,
-        "change_email_form": change_email_form,
-        "change_password_form": change_password_form,
-    }
-    return render(request=request, template_name="users/profile.html", context=context)
-
-
-@login_required
-def change_email(request):
-    edit_profile_form = EditProfileForm(instance=request.user)
-    change_password_form = ChangePasswordForm(user=request.user)
-    change_email_form = ChangeEmailForm(instance=request.user, request=request)
-
-    if request.method == "POST":
-        change_email_form = ChangeEmailForm(instance=request.user, data=request.POST, request=request)
-        if change_email_form.is_valid():
-            change_email_form.save()
-            messages.success(request=request, message="You have successfully changed your email.")
-        else:
-            messages.error(request=request, message="Email change failed. Please try again.")
     context = {
         "edit_profile_form": edit_profile_form,
         "change_email_form": change_email_form,
