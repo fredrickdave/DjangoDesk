@@ -110,7 +110,7 @@ class EditProfileForm(forms.ModelForm):
             "last_name": forms.TextInput(attrs={"class": "form-control"}),
             "about": forms.Textarea(attrs={"class": "form-control", "style": "height:100px"}),
             "job": forms.TextInput(attrs={"class": "form-control"}),
-            "department": forms.TextInput(attrs={"class": "form-control"}),
+            "department": forms.Select(attrs={"class": "form-control"}),
             "company": forms.TextInput(attrs={"class": "form-control"}),
             "phone": forms.TextInput(attrs={"class": "form-control"}),
             "linkedin": forms.URLInput(attrs={"class": "form-control"}),
