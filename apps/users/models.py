@@ -27,6 +27,10 @@ class UserRole(BaseModel):
         return self.get_role_display()
 
 
+class Department(BaseModel):
+    department = models.CharField(max_length=50, null=True, blank=True)
+
+
 # https://docs.djangoproject.com/en/4.2/topics/auth/customizing/#writing-a-manager-for-a-custom-user-model
 class CustomUserManager(BaseUserManager):
     """
@@ -68,7 +72,7 @@ class User(AbstractUser):
     about = models.TextField(max_length=1500, null=True, blank=True)
     role = models.ForeignKey(UserRole, null=True, blank=True, on_delete=models.SET_NULL, related_name="users")
     job = models.CharField(max_length=50, null=True, blank=True)
-    department = models.CharField(max_length=50, null=True, blank=True)
+    department = models.ForeignKey(Department, null=True, blank=True, on_delete=models.SET_NULL, related_name="users")
     company = models.CharField(max_length=50, null=True, blank=True)
     phone = models.CharField(max_length=50, null=True, blank=True)
     linkedin = models.URLField(max_length=500, null=True, blank=True)

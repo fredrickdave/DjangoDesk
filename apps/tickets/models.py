@@ -87,18 +87,28 @@ class TicketPriority(BaseModel):
 
 class TicketComment(BaseModel):
     comment = models.TextField()
-    created_by = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name="author")
+    created_by = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name="author")
 
     def __str__(self) -> str:
         return self.comment
+
+
+class TicketActivity(BaseModel):
+    activity = models.TextField()
+    created_by = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name="ticket_activities")
+
+    def __str__(self) -> str:
+        return self.activity
 
 
 class Ticket(BaseModel):
     ticket_number = models.CharField(max_length=25, unique=True, db_index=True)
     summary = models.CharField(max_length=100, null=True)
     description = models.TextField()
-    issue_type = models.ForeignKey(TicketType, null=True, blank=True, on_delete=models.SET_NULL, related_name="tickets")
-    assigned_agent = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name="agent")
+    issue_type = models.ForeignKey(TicketType, null=True, on_delete=models.SET_NULL, related_name="tickets")
+    assigned_agent = models.ForeignKey(
+        User, null=True, blank=True, on_delete=models.SET_NULL, related_name="assigned_tickets"
+    )
     status = models.ForeignKey(TicketStatus, null=True, blank=True, on_delete=models.SET_NULL, related_name="tickets")
     priority_id = models.ForeignKey(
         TicketPriority, null=True, blank=True, on_delete=models.SET_NULL, related_name="tickets"
@@ -106,7 +116,9 @@ class Ticket(BaseModel):
     comments = models.ForeignKey(
         TicketComment, null=True, blank=True, on_delete=models.SET_NULL, related_name="tickets"
     )
-    created_by = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name="tickets")
+    created_by = models.ForeignKey(
+        User, null=True, blank=True, on_delete=models.SET_NULL, related_name="created_tickets"
+    )
     completed_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self) -> str:
