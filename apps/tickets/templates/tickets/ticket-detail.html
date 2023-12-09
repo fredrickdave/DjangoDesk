@@ -19,17 +19,41 @@
 
     <section class="section">
         <div class="row">
+            <div class="col-lg-7">
+                <div class="card">
+                    <div class="card-body ticket">
+                        <h5 class="card-title">Ticket Details</h5>
+                        <h3>Summary: {{ selected_ticket.summary }}</h3>
+                        <p>Issue Type: {{ selected_ticket.issue_type }}</p>
+                        <p>Description: {{ selected_ticket.description }}</p>
 
-            <div class="col-lg-6">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-5">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Ticket Details</h5>
-                        {% for i in num %}
-                        <p>{{ request.user.user.tickets }}</p>
-                        <p>{{ selected_ticket.summary }}</p>
-                        <p>{{ selected_ticket.description }}</p>
-                        <p>{{ selected_ticket.created_by }}</p>
-                {% endfor %}
+                        <p class="badge rounded-pill text-bg-success">{{ selected_ticket.status }}</p>
+                        <p class=""><i class="bi bi-calendar"></i> Created on {{ selected_ticket.created_at }}</p>
+                        <p class=""><i class="bi bi-calendar"></i> Last updated {{ selected_ticket.updated_at }}</p>
+                        
+                        <h5 class="card-title mt-5">Assignees</h5>
+                        {% if selected_ticket.assigned_agent.avatar %}
+                        <img src="{{ selected_ticket.assigned_agent.avatar.url }}" alt="Profile" class="rounded-circle asignee-avatar" />
+                        {{ selected_ticket.assigned_agent.get_full_name }}
+                        {% endif %}
+
+                        <h5 class="card-title mt-5">Created By:</h5>
+                        {% if selected_ticket.created_by.avatar %}
+                        <img src="{{ selected_ticket.created_by.avatar.url }}" alt="Profile" class="rounded-circle asignee-avatar" />
+                        {{ selected_ticket.created_by.get_full_name }}
+                        {% endif %}
+
+                        <h5 class="card-title mt-5">Contact Details</h5>
+                        <div>Email: {{selected_ticket.created_by.email}}</div>
+                        <div>Phone: {{selected_ticket.created_by.phone}}</div>
                     </div>
                 </div>
             </div>
