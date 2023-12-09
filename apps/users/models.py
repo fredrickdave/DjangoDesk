@@ -30,6 +30,9 @@ class UserRole(BaseModel):
 class Department(BaseModel):
     department = models.CharField(max_length=50, null=True, blank=True)
 
+    def __str__(self) -> str:
+        return self.department
+
 
 # https://docs.djangoproject.com/en/4.2/topics/auth/customizing/#writing-a-manager-for-a-custom-user-model
 class CustomUserManager(BaseUserManager):
