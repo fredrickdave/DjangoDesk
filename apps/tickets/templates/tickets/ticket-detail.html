@@ -22,10 +22,14 @@
             <div class="col-lg-7">
                 <div class="card">
                     <div class="card-body ticket">
-                        <h5 class="card-title">Ticket Details</h5>
-                        <h3>Summary: {{ selected_ticket.summary }}</h3>
-                        <p>Issue Type: {{ selected_ticket.issue_type }}</p>
-                        <p>Description: {{ selected_ticket.description }}</p>
+                        <h2 class="pt-3">Summary: {{ selected_ticket.summary }}</h3>
+                        <hr class="mt-3">
+                        <button type="button" class="btn btn-secondary btn-sm"><i class="bi bi-paperclip"></i> Upload</button>
+                        <button type="button" class="btn btn-secondary btn-sm"><i class="bi bi-pencil-square"></i> Edit</button>
+                        <button type="button" class="btn btn-secondary btn-sm"><i class="bi bi-arrow-right-circle"></i> Transfer</button>
+
+                        <div class="mt-5">Issue Type: {{ selected_ticket.issue_type }}</div>
+                        <div class="mt-5">Description: {{ selected_ticket.description }}</div>
 
                     </div>
                 </div>
