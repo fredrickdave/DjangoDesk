@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
-from .forms import TicketForm
+from .forms import TicketCommentForm, TicketForm
 from .models import Reference, Ticket, TicketPriority, TicketStatus
 
 
@@ -14,9 +14,19 @@ def all_user_tickets(request):
 
 @login_required
 def ticket_details(request, ticket_number):
+    comment_form = TicketCommentForm()
     selected_ticket = Ticket.objects.get(ticket_number=ticket_number)
-    context = {"selected_ticket": selected_ticket, "num": range(50)}
-    print(request.user.created_tickets.all())
+
+    if request.method == "POST":
+        comment_form = TicketCommentForm(data=request.POST)
+        if comment_form.is_valid():
+            comment = comment_form.save(commit=False)
+            comment.created_by = request.user
+            print(comment.created_by)
+            comment.save()
+            return redirect(to="ticket-details", ticket_number=ticket_number)
+
+    context = {"selected_ticket": selected_ticket, "comment_form": comment_form}
     return render(request=request, template_name="tickets/ticket-detail.html", context=context)
 
 
@@ -26,7 +36,7 @@ def create_ticket(request):
     default_status = TicketStatus.objects.get(status=1)
 
     if request.method == "POST":
-        form = TicketForm(request.POST)
+        form = TicketForm(data=request.POST)
         if form.is_valid():
             ticket = form.save(commit=False)
             ticket.created_by = request.user
@@ -34,7 +44,7 @@ def create_ticket(request):
             ticket.status = default_status
             ticket.priority_id = default_priority
             ticket.save()
-            return redirect("dashboard")
+            return redirect(to="dashboard")
     else:
         form = TicketForm()
 
