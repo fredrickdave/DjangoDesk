@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import ModelForm
 
-from .models import Ticket
+from .models import Ticket, TicketComment
 
 
 class TicketForm(ModelForm):
@@ -23,3 +23,12 @@ class TicketForm(ModelForm):
         }
 
         error_class = "invalid-feedback"
+
+
+class TicketCommentForm(ModelForm):
+    class Meta:
+        model = TicketComment
+        fields = ["comment"]
+
+        widgets = {"comment": forms.Textarea(attrs={"class": "form-control ticket-comment"})}
+        labels = {"comment": "Add notes:"}
