@@ -22,7 +22,7 @@ def sign_in(request):
             user = authenticate(username=username, password=password)
             if user:
                 login(request=request, user=user)
-                messages.success(request, "You have sucessfully logged in.")
+                messages.success(request=request, message="You have sucessfully logged in.")
                 next_url = request.POST.get("next")
 
                 # Check if "?next=" param is safe (not off-site).

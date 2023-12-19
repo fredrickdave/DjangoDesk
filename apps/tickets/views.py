@@ -1,8 +1,9 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
 from .forms import TicketCommentForm, TicketForm
-from .models import Reference, Ticket, TicketPriority, TicketStatus
+from .models import Reference, Ticket, TicketComment, TicketPriority, TicketStatus
 
 
 @login_required
@@ -22,8 +23,9 @@ def ticket_details(request, ticket_number):
         if comment_form.is_valid():
             comment = comment_form.save(commit=False)
             comment.created_by = request.user
-            print(comment.created_by)
+            comment.tickets = selected_ticket
             comment.save()
+            messages.success(request=request, message="Your comment was posted successfully.")
             return redirect(to="ticket-details", ticket_number=ticket_number)
 
     context = {"selected_ticket": selected_ticket, "comment_form": comment_form}

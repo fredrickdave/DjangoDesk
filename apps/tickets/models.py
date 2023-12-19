@@ -85,14 +85,6 @@ class TicketPriority(BaseModel):
         return self.get_priority_display()
 
 
-class TicketComment(BaseModel):
-    comment = models.TextField()
-    created_by = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name="author")
-
-    def __str__(self) -> str:
-        return self.comment
-
-
 class TicketActivity(BaseModel):
     activity = models.TextField()
     created_by = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name="ticket_activities")
@@ -113,9 +105,9 @@ class Ticket(BaseModel):
     priority_id = models.ForeignKey(
         TicketPriority, null=True, blank=True, on_delete=models.SET_NULL, related_name="tickets"
     )
-    comments = models.ForeignKey(
-        TicketComment, null=True, blank=True, on_delete=models.SET_NULL, related_name="tickets"
-    )
+    # comments = models.ForeignKey(
+    #     TicketComment, null=True, blank=True, on_delete=models.SET_NULL, related_name="tickets"
+    # )
     created_by = models.ForeignKey(
         User, null=True, blank=True, on_delete=models.SET_NULL, related_name="created_tickets"
     )
@@ -123,3 +115,12 @@ class Ticket(BaseModel):
 
     def __str__(self) -> str:
         return self.summary
+
+
+class TicketComment(BaseModel):
+    comment = models.TextField()
+    tickets = models.ForeignKey(Ticket, null=True, on_delete=models.SET_NULL, related_name="comments")
+    created_by = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name="author")
+
+    def __str__(self) -> str:
+        return self.comment
