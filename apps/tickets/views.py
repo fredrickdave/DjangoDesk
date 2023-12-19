@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
 from .forms import TicketCommentForm, TicketForm
-from .models import Reference, Ticket, TicketComment, TicketPriority, TicketStatus
+from .models import Reference, Ticket, TicketPriority, TicketStatus
 
 
 @login_required
@@ -17,6 +17,7 @@ def all_user_tickets(request):
 def ticket_details(request, ticket_number):
     comment_form = TicketCommentForm()
     selected_ticket = Ticket.objects.get(ticket_number=ticket_number)
+    ticket_comments = selected_ticket.comments.all().order_by("-created_at")
 
     if request.method == "POST":
         comment_form = TicketCommentForm(data=request.POST)
@@ -28,7 +29,7 @@ def ticket_details(request, ticket_number):
             messages.success(request=request, message="Your comment was posted successfully.")
             return redirect(to="ticket-details", ticket_number=ticket_number)
 
-    context = {"selected_ticket": selected_ticket, "comment_form": comment_form}
+    context = {"selected_ticket": selected_ticket, "comment_form": comment_form, "ticket_comments": ticket_comments}
     return render(request=request, template_name="tickets/ticket-detail.html", context=context)
 
 
