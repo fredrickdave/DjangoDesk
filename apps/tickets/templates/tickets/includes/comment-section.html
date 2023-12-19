@@ -21,6 +21,7 @@
     <div class="col-lg-8">
         <h5 class="mt-5">All Comments</h5>
 
+        {% if ticket_comments %}
         {% for comment in ticket_comments %}
         <div class="card">
             <div class="card-comment">
@@ -40,6 +41,11 @@
             </div>
         </div>
         {% endfor %}
+        {% else  %}
+        <div class="card-comment">
+            <div>There are no comments yet.</div>
+        </div>
+        {% endif %}
     </div>
 </div>
 <!-- End Comment Section -->
