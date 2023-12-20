@@ -24,7 +24,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Create Ticket</h5>
-                        <form class="row g-3" action="{% url "create-ticket" %}" method="POST" novalidate>
+                        <form class="row g-3" action="{% url "create-ticket" %}" method="POST" enctype="multipart/form-data" novalidate>
                             {% csrf_token %}
 
                                 {% for form_field in ticket_form %}

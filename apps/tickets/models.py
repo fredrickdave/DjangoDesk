@@ -1,3 +1,5 @@
+import os
+
 from django.db import models
 from django.utils import timezone
 
@@ -105,9 +107,7 @@ class Ticket(BaseModel):
     priority_id = models.ForeignKey(
         TicketPriority, null=True, blank=True, on_delete=models.SET_NULL, related_name="tickets"
     )
-    # comments = models.ForeignKey(
-    #     TicketComment, null=True, blank=True, on_delete=models.SET_NULL, related_name="tickets"
-    # )
+    attachment = models.FileField(upload_to="attachments", null=True, blank=True)
     created_by = models.ForeignKey(
         User, null=True, blank=True, on_delete=models.SET_NULL, related_name="created_tickets"
     )
@@ -115,6 +115,10 @@ class Ticket(BaseModel):
 
     def __str__(self) -> str:
         return self.summary
+
+    @property
+    def attachment_name(self):
+        return os.path.basename(self.attachment.name)
 
 
 class TicketComment(BaseModel):

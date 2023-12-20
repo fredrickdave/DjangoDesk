@@ -39,7 +39,7 @@ def create_ticket(request):
     default_status = TicketStatus.objects.get(status=1)
 
     if request.method == "POST":
-        form = TicketForm(data=request.POST)
+        form = TicketForm(data=request.POST, files=request.FILES)
         if form.is_valid():
             ticket = form.save(commit=False)
             ticket.created_by = request.user
