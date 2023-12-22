@@ -26,7 +26,9 @@
         <div class="card">
             <div class="card-comment">
                 <div class="comment-header">
+                    {% if comment.created_by.avatar %}
                     <img src="{{ comment.created_by.avatar.url }}" alt="Profile" class="rounded-circle asignee-avatar" />
+                    {% endif %}
                     {% if comment.created_by.get_full_name %}
                     {{ comment.created_by.get_full_name }}
                     {% else %}
