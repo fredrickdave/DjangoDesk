@@ -59,8 +59,8 @@
                                             <h5 class="card-title pt-1">Assignees:</h5>
                                             {% if selected_ticket.assigned_agent.avatar %}
                                             <img src="{{ selected_ticket.assigned_agent.avatar.url }}" alt="Profile" class="rounded-circle asignee-avatar" />
-                                            {{ selected_ticket.assigned_agent.get_full_name }}
                                             {% endif %}
+                                            {{ selected_ticket.assigned_agent.get_full_name }}
                                         </div>
         
                                         <hr class="">
@@ -69,8 +69,8 @@
                                             <h5 class="card-title pt-1">Created By:</h5>
                                             {% if selected_ticket.created_by.avatar %}
                                             <img src="{{ selected_ticket.created_by.avatar.url }}" alt="Profile" class="rounded-circle asignee-avatar" />
-                                            {{ selected_ticket.created_by.get_full_name }}
                                             {% endif %}
+                                            {{ selected_ticket.created_by.get_full_name }}
                                         </div>
         
                                         <hr class="">
