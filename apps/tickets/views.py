@@ -2,8 +2,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .forms import TicketCommentForm, TicketForm, TicketAttachmentForm
-from .models import Reference, Ticket, TicketPriority, TicketStatus
+from .forms import TicketAttachmentForm, TicketCommentForm, TicketForm
+from .models import Reference, Ticket, TicketAttachment, TicketPriority, TicketStatus
 
 
 @login_required
@@ -18,6 +18,7 @@ def ticket_details(request, ticket_number):
     comment_form = TicketCommentForm()
     selected_ticket = get_object_or_404(Ticket, ticket_number=ticket_number)
     ticket_comments = selected_ticket.comments.all().order_by("-created_at")
+    print(selected_ticket.attachments.all()[0])
 
     if request.method == "POST":
         comment_form = TicketCommentForm(data=request.POST)
@@ -39,14 +40,20 @@ def create_ticket(request):
     default_status = TicketStatus.objects.get(status=1)
 
     if request.method == "POST":
-        form = TicketForm(data=request.POST, files=request.FILES)
-        if form.is_valid():
-            ticket = form.save(commit=False)
+        ticket_form = TicketForm(data=request.POST, files=request.FILES)
+        attachment_form = TicketAttachmentForm(data=request.POST, files=request.FILES)
+        if ticket_form.is_valid() and attachment_form.is_valid():
+            ticket = ticket_form.save(commit=False)
             ticket.created_by = request.user
             ticket.ticket_number = Reference.generate(prefix="INC")
             ticket.status = default_status
             ticket.priority_id = default_priority
             ticket.save()
+
+            files = attachment_form.cleaned_data["attachment"]
+            for file in files:
+                TicketAttachment.objects.create(attachment=file, ticket=ticket)
+
             return redirect(to="dashboard")
     else:
         ticket_form = TicketForm()

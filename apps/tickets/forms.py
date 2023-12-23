@@ -36,10 +36,28 @@ class TicketCommentForm(ModelForm):
         labels = {"comment": "Add notes:"}
 
 
+class MultipleFileInput(forms.ClearableFileInput):
+    allow_multiple_selected = True
+
+
+class MultipleFileField(forms.FileField):
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault("widget", MultipleFileInput(attrs={"class": "form-control"}))
+        super().__init__(*args, **kwargs)
+
+    def clean(self, data, initial=None):
+        single_file_clean = super().clean
+        if isinstance(data, (list, tuple)):
+            result = [single_file_clean(d, initial) for d in data]
+        else:
+            result = single_file_clean(data, initial)
+        return result
+
+
 class TicketAttachmentForm(ModelForm):
     class Meta:
         model = TicketAttachment
         fields = ["attachment"]
-
-        widgets = {"attachment": forms.FileInput(attrs={"class": "form-control"})}
         labels = {"attachment": "Attachment (Add up to 10 files. Max file size: 10MB):"}
+
+    attachment = MultipleFileField(label="Attachment (Add up to 10 files. Max file size: 10MB):")

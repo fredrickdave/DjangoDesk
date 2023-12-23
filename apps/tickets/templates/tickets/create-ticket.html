@@ -33,11 +33,13 @@
                                         {{ form_field }}
                                         {{ form_field.errors }}
                                     </div>
-                                {% endfor %}
 
-                                <label class="form-label">{{ attachment_form.attachment.label }}</label>
-                                {{ attachment_form.attachment }}
-                                {{ attachment_form.errors }}
+                                {% endfor %}
+                                <div class="col-12">
+                                    <label class="form-label">{{ attachment_form.attachment.label }}</label>
+                                    {{ attachment_form.attachment }}
+                                    {{ attachment_form.errors }}
+                                </div>
                              
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-primary">Submit Ticket</button>
