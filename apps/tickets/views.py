@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import TicketCommentForm, TicketForm
 from .models import Reference, Ticket, TicketPriority, TicketStatus
@@ -16,7 +16,7 @@ def all_user_tickets(request):
 @login_required
 def ticket_details(request, ticket_number):
     comment_form = TicketCommentForm()
-    selected_ticket = Ticket.objects.get(ticket_number=ticket_number)
+    selected_ticket = get_object_or_404(Ticket, ticket_number=ticket_number)
     ticket_comments = selected_ticket.comments.all().order_by("-created_at")
 
     if request.method == "POST":
