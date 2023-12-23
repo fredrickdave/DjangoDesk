@@ -129,9 +129,10 @@ class TicketAttachment(BaseModel):
     attachment = models.FileField(upload_to="attachments", null=True, blank=True)
     ticket = models.ForeignKey(Ticket, null=True, on_delete=models.SET_NULL, related_name="attachments")
 
-    def __str__(self) -> str:
-        return self.attachment.name
-
     @property
     def attachment_name(self):
         return os.path.basename(self.attachment.name)
+
+    @property
+    def url(self):
+        return self.attachment.url
