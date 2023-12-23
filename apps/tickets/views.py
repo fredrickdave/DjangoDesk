@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .forms import TicketCommentForm, TicketForm
+from .forms import TicketCommentForm, TicketForm, TicketAttachmentForm
 from .models import Reference, Ticket, TicketPriority, TicketStatus
 
 
@@ -49,7 +49,8 @@ def create_ticket(request):
             ticket.save()
             return redirect(to="dashboard")
     else:
-        form = TicketForm()
+        ticket_form = TicketForm()
+        attachment_form = TicketAttachmentForm()
 
-    context = {"ticket_form": form}
+    context = {"ticket_form": ticket_form, "attachment_form": attachment_form}
     return render(request=request, template_name="tickets/create-ticket.html", context=context)

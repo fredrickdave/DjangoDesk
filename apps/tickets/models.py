@@ -107,7 +107,6 @@ class Ticket(BaseModel):
     priority_id = models.ForeignKey(
         TicketPriority, null=True, blank=True, on_delete=models.SET_NULL, related_name="tickets"
     )
-    attachment = models.FileField(upload_to="attachments", null=True, blank=True)
     created_by = models.ForeignKey(
         User, null=True, blank=True, on_delete=models.SET_NULL, related_name="created_tickets"
     )
@@ -116,15 +115,22 @@ class Ticket(BaseModel):
     def __str__(self) -> str:
         return self.summary
 
-    @property
-    def attachment_name(self):
-        return os.path.basename(self.attachment.name)
+
 
 
 class TicketComment(BaseModel):
     comment = models.TextField()
-    tickets = models.ForeignKey(Ticket, null=True, on_delete=models.SET_NULL, related_name="comments")
-    created_by = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name="author")
+    ticket = models.ForeignKey(Ticket, null=True, on_delete=models.SET_NULL, related_name="comments")
+    created_by = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name="comments")
 
     def __str__(self) -> str:
         return self.comment
+
+
+class TicketAttachment(BaseModel):
+    attachment = models.FileField(upload_to="attachments", null=True, blank=True)
+    ticket = models.ForeignKey(Ticket, null=True, on_delete=models.SET_NULL, related_name="attachments")
+
+    @property
+    def attachment_name(self):
+        return os.path.basename(self.attachment.name)
