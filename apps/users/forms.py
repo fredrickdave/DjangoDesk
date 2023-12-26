@@ -39,10 +39,16 @@ class RegisterForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ["email"]
+        fields = [
+            "first_name",
+            "last_name",
+            "email",
+        ]
 
         widgets = {
             "email": forms.EmailInput(attrs={"class": "form-control", "autocomplete": "new-password"}),
+            "first_name": forms.EmailInput(attrs={"class": "form-control"}),
+            "last_name": forms.EmailInput(attrs={"class": "form-control"}),
         }
 
 
