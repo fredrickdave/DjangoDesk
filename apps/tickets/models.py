@@ -127,7 +127,7 @@ class TicketComment(BaseModel):
 
 class TicketAttachment(BaseModel):
     attachment = models.FileField(upload_to="attachments", null=True, blank=True)
-    ticket = models.ForeignKey(Ticket, null=True, on_delete=models.SET_NULL, related_name="attachments")
+    ticket = models.ForeignKey(Ticket, null=True, on_delete=models.CASCADE, related_name="attachments")
 
     @property
     def attachment_name(self):
