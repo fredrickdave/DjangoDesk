@@ -115,7 +115,11 @@
                   <div class="col-lg-3 col-md-4 label">{{ form_field.label }}</div>
                   <div class="col-lg-9 col-md-8">
                     {% if form_field.label != "Department" %}
-                      {% if form_field.value %}{{ form_field.value }}{% else %}-{% endif %}
+                      {% if form_field.value %}
+                      {{ form_field.value }}
+                      {% else %}
+                      -
+                      {% endif %}
                     {% else %}
                       {% if request.user.department %}{{ request.user.department }}{% else %}-{% endif %}
                     {% endif %}</div>

@@ -48,13 +48,17 @@
           {% if request.user.avatar %}
           <img src="{{ request.user.avatar.url }}" alt="Profile" class="rounded-circle" />
           {% endif %}
-          <span class="d-none d-md-block dropdown-toggle ps-2">Fredrick Dave Santulan</span> 
+          <span class="d-none d-md-block dropdown-toggle ps-2">{{ request.user.get_full_name }}</span> 
         </a><!-- End Profile Image Icon -->
 
         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
           <li class="dropdown-header">
-            <h6>Fredrick Dave Santulan</h6>
-            <span>Web Designer</span>
+            <h6>{{ request.user.get_full_name }}</h6>
+            <span>
+              {% if request.user.job %}
+              {{request.user.job}}
+              {% endif %}
+            </span>
           </li>
           <li>
             <hr class="dropdown-divider" />
