@@ -18,7 +18,6 @@ def ticket_details(request, ticket_number):
     comment_form = TicketCommentForm()
     selected_ticket = get_object_or_404(Ticket, ticket_number=ticket_number)
     ticket_comments = selected_ticket.comments.all().order_by("-created_at")
-    print(selected_ticket.attachments.all()[0])
 
     if request.method == "POST":
         comment_form = TicketCommentForm(data=request.POST)
@@ -54,7 +53,14 @@ def create_ticket(request):
             for file in files:
                 TicketAttachment.objects.create(attachment=file, ticket=ticket)
 
-            return redirect(to="dashboard")
+            messages.success(
+                request=request,
+                message=(
+                    f"Your ticket {ticket.ticket_number} has been created. Our support team will get back to you as"
+                    " soon as possible."
+                ),
+            )
+            return redirect(to="ticket-details", ticket_number=ticket.ticket_number)
     else:
         ticket_form = TicketForm()
         attachment_form = TicketAttachmentForm()
