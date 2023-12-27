@@ -1264,3 +1264,11 @@ h6 {
 .ticket-comment {
   height: 100px;
 }
+
+.attachment-label {
+  color: #ffffff;
+}
+
+.attachment-label:hover {
+  color: #ffffffc7;
+}

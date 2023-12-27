@@ -67,3 +67,15 @@ def create_ticket(request):
 
     context = {"ticket_form": ticket_form, "attachment_form": attachment_form}
     return render(request=request, template_name="tickets/create-ticket.html", context=context)
+
+
+@login_required
+def delete_attachment(request, ticket_number, pk):
+    attachment = get_object_or_404(TicketAttachment, id=pk)
+
+    if request.user == attachment.ticket.created_by:
+        attachment.delete()
+        messages.success(request=request, message="Attachment has been deleted successfully.")
+    else:
+        messages.error(request=request, message="You are not authorized to perform this action.")
+    return redirect(to="ticket-details", ticket_number=ticket_number)
