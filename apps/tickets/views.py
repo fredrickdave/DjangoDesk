@@ -15,22 +15,52 @@ def all_user_tickets(request):
 
 @login_required
 def ticket_details(request, ticket_number):
-    comment_form = TicketCommentForm()
     selected_ticket = get_object_or_404(Ticket, ticket_number=ticket_number)
     ticket_comments = selected_ticket.comments.all().order_by("-created_at")
 
     if request.method == "POST":
-        comment_form = TicketCommentForm(data=request.POST)
-        if comment_form.is_valid():
-            comment = comment_form.save(commit=False)
-            comment.created_by = request.user
-            comment.tickets = selected_ticket
-            comment.save()
-            messages.success(request=request, message="Your comment was posted successfully.")
-            return redirect(to="ticket-details", ticket_number=ticket_number)
+        if "add-comment" in request.POST:
+            comment_form = TicketCommentForm(data=request.POST)
+            if comment_form.is_valid():
+                comment = comment_form.save(commit=False)
+                comment.created_by = request.user
+                comment.ticket = selected_ticket
+                comment.save()
+                messages.success(request=request, message="Your comment was posted successfully.")
+                return redirect(to="ticket-details", ticket_number=ticket_number)
+        elif "add-attachment" in request.POST:
+            print("Add attachment")
+            attachment_form = TicketAttachmentForm(data=request.POST, files=request.FILES)
+            if attachment_form.is_valid():
+                files = attachment_form.cleaned_data["attachment"]
+                create_attachment(files=files, ticket=selected_ticket)
+                messages.success(request=request, message="Attachment has been added successfully.")
+                return redirect(to="ticket-details", ticket_number=ticket_number)
 
-    context = {"selected_ticket": selected_ticket, "comment_form": comment_form, "ticket_comments": ticket_comments}
+    else:
+        comment_form = TicketCommentForm()
+        attachment_form = TicketAttachmentForm()
+
+    context = {
+        "selected_ticket": selected_ticket,
+        "comment_form": comment_form,
+        "attachment_form": attachment_form,
+        "ticket_comments": ticket_comments,
+    }
     return render(request=request, template_name="tickets/ticket-detail.html", context=context)
+
+
+def create_attachment(files, ticket):
+    """This function accepts a list of TemporaryFiles object
+
+    Args:
+        request (_type_): _description_
+        files (list): _description_
+        ticket (_type_): _description_
+    """
+
+    for file in files:
+        TicketAttachment.objects.create(attachment=file, ticket=ticket)
 
 
 @login_required
@@ -50,9 +80,7 @@ def create_ticket(request):
             ticket.save()
 
             files = attachment_form.cleaned_data["attachment"]
-            for file in files:
-                TicketAttachment.objects.create(attachment=file, ticket=ticket)
-
+            create_attachment(files=files, ticket=ticket)
             messages.success(
                 request=request,
                 message=(

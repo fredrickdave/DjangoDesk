@@ -27,9 +27,44 @@
                                     <div class="col-lg-8">
                                         <h3 class="pt-3 pe-5">Summary: {{ selected_ticket.summary }}</h3>
                                         <hr class="mt-3">
-                                        <button type="button" class="btn btn-primary btn-sm"><i class="bi bi-paperclip"></i> Upload</button>
-                                        <button type="button" class="btn btn-primary btn-sm"><i class="bi bi-pencil-square"></i> Edit</button>
-                                        <button type="button" class="btn btn-primary btn-sm"><i class="bi bi-arrow-right-circle"></i> Transfer</button>
+                                        <a href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#AddAttachmentModal">
+                                            <i class="bi bi-paperclip"></i> Upload
+                                        </a>
+                                        <a href="#" class="btn btn-primary btn-sm"><i class="bi bi-pencil-square"></i> Edit</a>
+                                        <a href="#" class="btn btn-primary btn-sm"><i class="bi bi-arrow-right-circle"></i> Transfer</a>
+
+                                        <!-- Upload Attachment Modal -->
+                                        <div class="modal fade" id="AddAttachmentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="exampleModalLabel">Upload Files</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+
+                                                <form class="row g-3" method="POST" enctype="multipart/form-data" novalidate>
+                                                    {% csrf_token %}
+
+                                                    <div class="modal-body">
+                                                        <div class="col-12">
+                                                        <label class="form-label">{{ attachment_form.attachment.label }}</label>
+                                                        {{ attachment_form.attachment }}
+                                                        {{ attachment_form.errors }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="modal-footer">
+                                                        <a href="#" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</a>
+                                                        <button type="submit" class="btn btn-primary" name="add-attachment">Upload</button>
+                                                    </div>
+
+                                                </form>
+                                            </div>
+                                            </div>
+                                        </div>
+
+
+
 
                                         <div class="mt-4 pe-5"><span class="fw-semibold">Attachments: </span>
                                             {% if selected_ticket.attachments.all %}
@@ -40,13 +75,13 @@
                                                         {{ attachment.attachment_name }}
                                                     </a>
 
-                                                    <!-- Button trigger modal -->
+                                                    <!-- Delete Attachment trigger modal -->
                                                     <a href="#" data-bs-toggle="modal" data-bs-target="#attachment{{ attachment.id }}Modal">
                                                         <i class="bi bi-x-lg attachment-label"></i>
                                                     </a>
                                                 </span> 
                                             
-                                                <!-- Modal -->
+                                                <!-- Delete Attachment Modal -->
                                                 <div class="modal fade" id="attachment{{ attachment.id }}Modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                     <div class="modal-dialog">
                                                     <div class="modal-content">
