@@ -1,5 +1,6 @@
 import os
 
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
 
@@ -129,8 +130,20 @@ def attachment_directory_path(instance, filename):
     return f"ticketfiles/{instance.ticket.id}/{filename}"
 
 
+def file_size(value):
+    limit = 10 * 1024 * 1024  # 10 MB
+
+    if isinstance(value, (list, tuple)):
+        for file in value:
+            if file.size > limit:
+                raise ValidationError("File too large. Size should not exceed 10 MB.")
+    else:
+        if value.size > limit:
+            raise ValidationError("File too large. Size should not exceed 10 MB.")
+
+
 class TicketAttachment(BaseModel):
-    attachment = models.FileField(upload_to=attachment_directory_path, null=True, blank=True)
+    attachment = models.FileField(upload_to=attachment_directory_path, validators=[file_size], null=True, blank=True)
     ticket = models.ForeignKey(Ticket, null=True, on_delete=models.CASCADE, related_name="attachments")
 
     @property

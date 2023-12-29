@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import ModelForm
 
-from .models import Ticket, TicketAttachment, TicketComment
+from .models import Ticket, TicketAttachment, TicketComment, file_size
 
 
 class TicketForm(ModelForm):
@@ -36,6 +36,7 @@ class TicketCommentForm(ModelForm):
         labels = {"comment": "Add notes:"}
 
 
+# https://docs.djangoproject.com/en/5.0/topics/http/file-uploads/#uploading-multiple-files
 class MultipleFileInput(forms.ClearableFileInput):
     allow_multiple_selected = True
 
@@ -60,4 +61,6 @@ class TicketAttachmentForm(ModelForm):
         fields = ["attachment"]
         labels = {"attachment": "Attachment (Add up to 10 files. Max file size: 10MB):"}
 
-    attachment = MultipleFileField(label="Attachment (Add up to 10 files. Max file size: 10MB):")
+    attachment = MultipleFileField(
+        label="Attachment (Add up to 10 files. Max file size: 10MB):", validators=[file_size]
+    )

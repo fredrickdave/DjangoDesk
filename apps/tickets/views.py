@@ -15,6 +15,8 @@ def all_user_tickets(request):
 
 @login_required
 def ticket_details(request, ticket_number):
+    comment_form = TicketCommentForm()
+    attachment_form = TicketAttachmentForm()
     selected_ticket = get_object_or_404(Ticket, ticket_number=ticket_number)
     ticket_comments = selected_ticket.comments.all().order_by("-created_at")
 
@@ -29,17 +31,19 @@ def ticket_details(request, ticket_number):
                 messages.success(request=request, message="Your comment was posted successfully.")
                 return redirect(to="ticket-details", ticket_number=ticket_number)
         elif "add-attachment" in request.POST:
-            print("Add attachment")
             attachment_form = TicketAttachmentForm(data=request.POST, files=request.FILES)
+
             if attachment_form.is_valid():
                 files = attachment_form.cleaned_data["attachment"]
+                print("Files", files)
                 create_attachment(files=files, ticket=selected_ticket)
                 messages.success(request=request, message="Attachment has been added successfully.")
                 return redirect(to="ticket-details", ticket_number=ticket_number)
-
-    else:
-        comment_form = TicketCommentForm()
-        attachment_form = TicketAttachmentForm()
+            else:
+                # https://docs.djangoproject.com/en/5.0/ref/forms/api/#django.forms.ErrorList.as_text
+                error = attachment_form.errors["attachment"].as_text()
+                print(error)
+                messages.error(request=request, message=error)
 
     context = {
         "selected_ticket": selected_ticket,
@@ -51,7 +55,7 @@ def ticket_details(request, ticket_number):
 
 
 def create_attachment(files, ticket):
-    """This function accepts a list of TemporaryFiles object
+    """This function accepts a list of Files object
 
     Args:
         request (_type_): _description_
@@ -65,13 +69,12 @@ def create_attachment(files, ticket):
 
 @login_required
 def create_ticket(request):
-    default_priority = TicketPriority.objects.get(priority=2)
-    default_status = TicketStatus.objects.get(status=1)
-
     if request.method == "POST":
         ticket_form = TicketForm(data=request.POST, files=request.FILES)
         attachment_form = TicketAttachmentForm(data=request.POST, files=request.FILES)
         if ticket_form.is_valid() and attachment_form.is_valid():
+            default_priority = TicketPriority.objects.get(priority=2)
+            default_status = TicketStatus.objects.get(status=1)
             ticket = ticket_form.save(commit=False)
             ticket.created_by = request.user
             ticket.ticket_number = Reference.generate(prefix="INC")
