@@ -125,8 +125,12 @@ class TicketComment(BaseModel):
         return self.comment
 
 
+def attachment_directory_path(instance, filename):
+    return f"ticketfiles/{instance.ticket.id}/{filename}"
+
+
 class TicketAttachment(BaseModel):
-    attachment = models.FileField(upload_to="attachments", null=True, blank=True)
+    attachment = models.FileField(upload_to=attachment_directory_path, null=True, blank=True)
     ticket = models.ForeignKey(Ticket, null=True, on_delete=models.CASCADE, related_name="attachments")
 
     @property
