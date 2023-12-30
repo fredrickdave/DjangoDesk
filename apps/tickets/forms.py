@@ -56,11 +56,24 @@ class MultipleFileField(forms.FileField):
 
 
 class TicketAttachmentForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        self.max_files = 10
+        if kwargs["file_count"] is not None:
+            self.file_count = kwargs.pop("file_count")
+        super().__init__(*args, **kwargs)
+
+    def clean_attachment(self):
+        data = self.cleaned_data["attachment"]
+
+        if (len(data) + len(self.file_count.all())) > self.max_files:
+            raise forms.ValidationError(f"You can upload up to {self.max_files} files only.")
+
+        return data
+
     class Meta:
         model = TicketAttachment
         fields = ["attachment"]
-        labels = {"attachment": "Attachment (Add up to 10 files. Max file size: 10MB):"}
 
     attachment = MultipleFileField(
-        label="Attachment (Add up to 10 files. Max file size: 10MB):", validators=[file_size]
+        label="Attachment (Add up to 10 files. Max file size: 10 MB):", validators=[file_size]
     )

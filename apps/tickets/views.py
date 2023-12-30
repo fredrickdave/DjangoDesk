@@ -15,14 +15,15 @@ def all_user_tickets(request):
 
 @login_required
 def ticket_details(request, ticket_number):
-    comment_form = TicketCommentForm()
-    attachment_form = TicketAttachmentForm()
     selected_ticket = get_object_or_404(Ticket, ticket_number=ticket_number)
     ticket_comments = selected_ticket.comments.all().order_by("-created_at")
 
     if request.method == "POST":
+        comment_form = TicketCommentForm(data=request.POST)
+        attachment_form = TicketAttachmentForm(
+            data=request.POST, files=request.FILES, file_count=selected_ticket.attachments.all()
+        )
         if "add-comment" in request.POST:
-            comment_form = TicketCommentForm(data=request.POST)
             if comment_form.is_valid():
                 comment = comment_form.save(commit=False)
                 comment.created_by = request.user
@@ -31,19 +32,18 @@ def ticket_details(request, ticket_number):
                 messages.success(request=request, message="Your comment was posted successfully.")
                 return redirect(to="ticket-details", ticket_number=ticket_number)
         elif "add-attachment" in request.POST:
-            attachment_form = TicketAttachmentForm(data=request.POST, files=request.FILES)
-
             if attachment_form.is_valid():
                 files = attachment_form.cleaned_data["attachment"]
-                print("Files", files)
                 create_attachment(files=files, ticket=selected_ticket)
                 messages.success(request=request, message="Attachment has been added successfully.")
                 return redirect(to="ticket-details", ticket_number=ticket_number)
             else:
                 # https://docs.djangoproject.com/en/5.0/ref/forms/api/#django.forms.ErrorList.as_text
-                error = attachment_form.errors["attachment"].as_text()
-                print(error)
+                error = attachment_form.errors["attachment"].as_text().replace("*", "")
                 messages.error(request=request, message=error)
+    else:
+        comment_form = TicketCommentForm()
+        attachment_form = TicketAttachmentForm(file_count=selected_ticket.attachments.all())
 
     context = {
         "selected_ticket": selected_ticket,
