@@ -136,8 +136,8 @@
                                         
                                         <div class="mb-2">
                                             <h5 class="card-title pt-1">Assignees:</h5>
-                                            {% if selected_ticket.assigned_agent.avatar %}
-                                            <img src="{{ selected_ticket.assigned_agent.avatar.url }}" alt="Profile" class="rounded-circle asignee-avatar" />
+                                            {% if selected_ticket.assigned_agent %}
+                                            <img src="{% if selected_ticket.assigned_agent.avatar %}{{ selected_ticket.assigned_agent.avatar.url }}{% else %}{% static "img/profile.png" %}{% endif %}" alt="Profile" class="rounded-circle asignee-avatar" />
                                             {% endif %}
                                             {{ selected_ticket.assigned_agent.get_full_name }}
                                         </div>
@@ -146,8 +146,8 @@
         
                                         <div class="mb-2">
                                             <h5 class="card-title pt-1">Created By:</h5>
-                                            {% if selected_ticket.created_by.avatar %}
-                                            <img src="{{ selected_ticket.created_by.avatar.url }}" alt="Profile" class="rounded-circle asignee-avatar" />
+                                            {% if selected_ticket.created_by %}
+                                            <img src="{% if selected_ticket.created_by.avatar %}{{ selected_ticket.created_by.avatar.url }}{% else %}{% static "img/profile.png" %}{% endif %}" alt="Profile" class="rounded-circle asignee-avatar" />
                                             {% endif %}
                                             {{ selected_ticket.created_by.get_full_name }}
                                         </div>
