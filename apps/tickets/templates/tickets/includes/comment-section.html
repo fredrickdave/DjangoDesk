@@ -29,11 +29,7 @@
             <div class="card-comment">
                 <div class="comment-header">
                     {% if comment.created_by %}
-<<<<<<< HEAD
                     <img src="{% if comment.created_by.avatar %}{{ comment.created_by.avatar.url }}{% else %}{% static "img/profile.png" %}{% endif %}" alt="Profile" class="rounded-circle asignee-avatar" />
-=======
-                    <img src="{% if comment.created_by.avatar %}{{ comment.created_by.avatar.avatar.url }}{% else %}{% static "img/profile.png" %}{% endif %}" alt="Profile" class="rounded-circle asignee-avatar" />
->>>>>>> a6989526cda0d2aca23c286b7a0f586e2a08bac4
                     {% endif %}
                     {% if comment.created_by.get_full_name %}
                     {{ comment.created_by.get_full_name }}
