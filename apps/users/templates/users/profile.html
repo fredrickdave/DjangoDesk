@@ -1,4 +1,5 @@
 {% extends "base.html" %} 
+{% load static %}
 
 {% block title %}Profile{% endblock title %}Profile
 
@@ -24,13 +25,11 @@
           class="card-body profile-card pt-4 d-flex flex-column align-items-center"
         >
           <h5 class="card-title">Profile Card</h5>
-          {% if request.user.avatar %}
           <img
-            src="{{request.user.avatar.url }}"
+            src="{% if request.user.avatar %}{{ request.user.avatar.url }}{% else %}{% static "img/profile.png" %}{% endif %}"
             alt="Profile"
             class="rounded-circle"
           />
-          {% endif %}
 
           {% if request.user.get_full_name %}<h2>
             {{request.user.get_full_name}}</h2>

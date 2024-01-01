@@ -45,9 +45,7 @@
           href="#"
           data-bs-toggle="dropdown"
         >
-          {% if request.user.avatar %}
-          <img src="{{ request.user.avatar.url }}" alt="Profile" class="rounded-circle" />
-          {% endif %}
+          <img src="{% if request.user.avatar %}{{ request.user.avatar.url }}{% else %}{% static "img/profile.png" %}{% endif %}" alt="Profile" class="rounded-circle" />
           <span class="d-none d-md-block dropdown-toggle ps-2">{{ request.user.get_full_name }}</span> 
         </a><!-- End Profile Image Icon -->
 
