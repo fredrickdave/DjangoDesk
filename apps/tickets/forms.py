@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import ModelForm
 
-from .models import Ticket, TicketAttachment, TicketComment, file_size
+from .models import Ticket, TicketAttachment, TicketComment, validate_file_size
 
 
 class TicketForm(ModelForm):
@@ -75,5 +75,5 @@ class TicketAttachmentForm(ModelForm):
         fields = ["attachment"]
 
     attachment = MultipleFileField(
-        label="Attachment (Add up to 10 files. Max file size: 10 MB):", validators=[file_size]
+        label="Attachment (Add up to 10 files. Max file size: 10 MB):", validators=[validate_file_size]
     )

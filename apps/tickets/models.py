@@ -1,5 +1,6 @@
 import os
 
+import magic
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
@@ -130,7 +131,7 @@ def attachment_directory_path(instance, filename):
     return f"ticketfiles/{instance.ticket.id}/{filename}"
 
 
-def file_size(value):
+def validate_file_size(value):
     limit = 10 * 1024 * 1024  # 10 MB
 
     if isinstance(value, (list, tuple)):
@@ -142,8 +143,27 @@ def file_size(value):
             raise ValidationError("File too large. Size should not exceed 10 MB.")
 
 
+def validate_file_type(value):
+    blacklisted_mime_types = ["application/x-msdownload", "application/x-dosexec", "application/CDFV2"]
+    blacklisted_file_extensions = [".exe", ".msi", ".cmd", ".bat"]
+    if isinstance(value, (list, tuple)):
+        for file in value:
+            file_mime_type = magic.from_buffer(file.read(1024), mime=True)
+            ext = os.path.splitext(file.name)[1]
+            print("MIME", file_mime_type)
+            print("EXT", ext)
+            if file_mime_type in blacklisted_mime_types or ext in blacklisted_file_extensions:
+                raise ValidationError("Unsupported file type.")
+    else:
+        file_mime_type = magic.from_buffer(value.read(1024), mime=True)
+        if file_mime_type in blacklisted_mime_types:
+            raise ValidationError("Unsupported file type.")
+
+
 class TicketAttachment(BaseModel):
-    attachment = models.FileField(upload_to=attachment_directory_path, validators=[file_size], null=True, blank=True)
+    attachment = models.FileField(
+        upload_to=attachment_directory_path, validators=[validate_file_size, validate_file_type], null=True, blank=True
+    )
     ticket = models.ForeignKey(Ticket, null=True, on_delete=models.CASCADE, related_name="attachments")
 
     @property
