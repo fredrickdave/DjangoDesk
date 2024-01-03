@@ -34,36 +34,7 @@
                                         <a href="#" class="btn btn-primary btn-sm"><i class="bi bi-arrow-right-circle"></i> Transfer</a>
 
                                         <!-- Upload Attachment Modal -->
-                                        <div class="modal fade" id="AddAttachmentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                <h1 class="modal-title fs-5" id="exampleModalLabel">Upload Files</h1>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-
-                                                <form class="row g-3" method="POST" enctype="multipart/form-data" novalidate>
-                                                    {% csrf_token %}
-
-                                                    <div class="modal-body">
-                                                        <div class="col-12">
-                                                        <label class="form-label">{{ attachment_form.attachment.label }}</label>
-                                                        {{ attachment_form.attachment }}
-                                                        {% for field, error in attachment_form.errors.items %}
-                                                        {{ error }}
-                                                        {% endfor %}
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="modal-footer">
-                                                        <a href="#" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</a>
-                                                        <button type="submit" class="btn btn-primary" name="add-attachment">Upload</button>
-                                                    </div>
-
-                                                </form>
-                                            </div>
-                                            </div>
-                                        </div>
+                                        {% include "tickets/includes/upload-attachment-modal.html" %}
 
 
 
@@ -84,31 +55,7 @@
                                                 </span> 
                                             
                                                 <!-- Delete Attachment Modal -->
-                                                <div class="modal fade" id="attachment{{ attachment.id }}Modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                    <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <div class="container">
-                                                                <div class="row">
-                                                                    <div class="col-11">
-                                                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Delete {{ attachment.attachment_name }}</h1>
-                                                                    </div>
-                                                                    <div class="col-1">
-                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                        Are you sure you want to delete this attachment?
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                        <a href="#" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</a>
-                                                        <a href="{% url "delete-attachment" ticket_number=selected_ticket.ticket_number pk=attachment.id %}" class="btn btn-primary">Delete</a>
-                                                        </div>
-                                                    </div>
-                                                    </div>
-                                                </div>
+                                                {% include "tickets/includes/delete-attachment-modal.html" %}
                                             {% endfor %}
 
 
