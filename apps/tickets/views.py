@@ -21,7 +21,6 @@ def ticket_details(request, ticket_number):
 
     comment_form = TicketCommentForm()
     attachment_form = TicketAttachmentForm(file_count=ticket_file_count)
-
     if request.method == "POST":
         if "add-comment" in request.POST:
             comment_form = TicketCommentForm(data=request.POST)

@@ -13,7 +13,6 @@ class TicketForm(ModelForm):
         widgets = {
             "summary": forms.TextInput(attrs={"class": "form-control"}),
             "issue_type": forms.Select(attrs={"class": "form-control"}),
-            # "attachment": forms.FileInput(attrs={"class": "form-control"}),
             "description": forms.Textarea(attrs={"class": "form-control"}),
         }
 
@@ -21,7 +20,6 @@ class TicketForm(ModelForm):
             "summary": "Ticket Summary (Required)",
             "description": "Description (Required)",
             "issue_type": "Issue Type (Required)",
-            # "attachment": "Issue Type (Optional)",
         }
 
         error_class = "invalid-feedback"
@@ -65,6 +63,9 @@ class TicketAttachmentForm(ModelForm):
     def clean_attachment(self):
         data = self.cleaned_data["attachment"]
 
+        if not data:
+            raise forms.ValidationError("You did not choose any file to be uploaded.")
+
         if (len(data) + self.file_count) > self.max_files:
             raise forms.ValidationError(f"You can upload up to {self.max_files} files only.")
 
@@ -75,5 +76,6 @@ class TicketAttachmentForm(ModelForm):
         fields = ["attachment"]
 
     attachment = MultipleFileField(
-        label="Attachment (Add up to 10 files. Max file size: 10 MB):", validators=[validate_file_size]
+        label="Attachment (Add up to 10 files. Max file size: 10 MB):",
+        validators=[validate_file_size],
     )
