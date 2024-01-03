@@ -146,16 +146,17 @@ def validate_file_size(value):
 def validate_file_type(value):
     blacklisted_mime_types = ["application/x-msdownload", "application/x-dosexec", "application/CDFV2"]
     blacklisted_file_extensions = [".exe", ".msi", ".cmd", ".bat"]
+
     if isinstance(value, (list, tuple)):
         for file in value:
-            file_mime_type = magic.from_buffer(file.read(1024), mime=True)
+            file_mime_type = magic.from_buffer(file.read(2048), mime=True)
             ext = os.path.splitext(file.name)[1]
             print("MIME", file_mime_type)
             print("EXT", ext)
             if file_mime_type in blacklisted_mime_types or ext in blacklisted_file_extensions:
                 raise ValidationError("Unsupported file type.")
     else:
-        file_mime_type = magic.from_buffer(value.read(1024), mime=True)
+        file_mime_type = magic.from_buffer(value.read(2048), mime=True)
         if file_mime_type in blacklisted_mime_types:
             raise ValidationError("Unsupported file type.")
 
