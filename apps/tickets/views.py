@@ -17,8 +17,10 @@ def all_user_tickets(request):
 def ticket_details(request, ticket_number):
     selected_ticket = get_object_or_404(Ticket, ticket_number=ticket_number)
     ticket_comments = selected_ticket.comments.all().order_by("-created_at")
+    ticket_file_count = len(selected_ticket.attachments.all())
+
     comment_form = TicketCommentForm()
-    attachment_form = TicketAttachmentForm(file_count=selected_ticket.attachments.all())
+    attachment_form = TicketAttachmentForm(file_count=ticket_file_count)
 
     if request.method == "POST":
         if "add-comment" in request.POST:
@@ -31,9 +33,7 @@ def ticket_details(request, ticket_number):
                 messages.success(request=request, message="Your comment was posted successfully.")
                 return redirect(to="ticket-details", ticket_number=ticket_number)
         elif "add-attachment" in request.POST:
-            attachment_form = TicketAttachmentForm(
-                data=request.POST, files=request.FILES, file_count=selected_ticket.attachments.all()
-            )
+            attachment_form = TicketAttachmentForm(data=request.POST, files=request.FILES, file_count=ticket_file_count)
             if attachment_form.is_valid():
                 files = attachment_form.cleaned_data["attachment"]
                 create_attachment(files=files, ticket=selected_ticket)
@@ -70,7 +70,7 @@ def create_attachment(files, ticket):
 def create_ticket(request):
     if request.method == "POST":
         ticket_form = TicketForm(data=request.POST, files=request.FILES)
-        attachment_form = TicketAttachmentForm(data=request.POST, files=request.FILES)
+        attachment_form = TicketAttachmentForm(data=request.POST, files=request.FILES, file_count=0)
         if ticket_form.is_valid() and attachment_form.is_valid():
             default_priority = TicketPriority.objects.get(priority=2)
             default_status = TicketStatus.objects.get(status=1)
@@ -93,7 +93,7 @@ def create_ticket(request):
             return redirect(to="ticket-details", ticket_number=ticket.ticket_number)
     else:
         ticket_form = TicketForm()
-        attachment_form = TicketAttachmentForm()
+        attachment_form = TicketAttachmentForm(file_count=0)
 
     context = {"ticket_form": ticket_form, "attachment_form": attachment_form}
     return render(request=request, template_name="tickets/create-ticket.html", context=context)

@@ -65,7 +65,7 @@ class TicketAttachmentForm(ModelForm):
     def clean_attachment(self):
         data = self.cleaned_data["attachment"]
 
-        if (len(data) + len(self.file_count.all())) > self.max_files:
+        if (len(data) + self.file_count) > self.max_files:
             raise forms.ValidationError(f"You can upload up to {self.max_files} files only.")
 
         return data

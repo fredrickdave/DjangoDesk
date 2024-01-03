@@ -38,7 +38,9 @@
                                 <div class="col-12">
                                     <label class="form-label">{{ attachment_form.attachment.label }}</label>
                                     {{ attachment_form.attachment }}
-                                    {{ attachment_form.errors }}
+                                    {% for field, error in attachment_form.errors.items %}
+                                    {{ error }}
+                                    {% endfor %}
                                 </div>
                              
                                 <div class="text-center">
