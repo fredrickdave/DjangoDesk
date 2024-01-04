@@ -42,17 +42,18 @@
                                         <div class="mt-4 pe-5"><span class="fw-semibold">Attachments: </span>
                                             {% if selected_ticket.attachments.all %}
                                             {% for attachment in selected_ticket.attachments.all %}
-                                            
-                                                <span class="badge rounded-pill bg-secondary">
+                                                {% comment %} <span class="badge rounded-pill bg-secondary"> {% endcomment %}
+                                                    <span class="text-bg-secondary rounded me-1 attachment-badge fw-bold">
                                                     <a href="{{ attachment.url }}" target="_blank" class="attachment-label">
                                                         {{ attachment.attachment_name }}
                                                     </a>
 
                                                     <!-- Delete Attachment trigger modal -->
                                                     <a href="#" data-bs-toggle="modal" data-bs-target="#attachment{{ attachment.id }}Modal">
-                                                        <i class="bi bi-x-lg attachment-label"></i>
+                                                        <i class="bi bi-x-lg delete-attachment-label"></i>
                                                     </a>
-                                                </span> 
+                                                </span>
+                                                {% comment %} </span>  {% endcomment %}
                                             
                                                 <!-- Delete Attachment Modal -->
                                                 {% include "tickets/includes/delete-attachment-modal.html" %}
