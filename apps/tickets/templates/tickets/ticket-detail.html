@@ -30,11 +30,14 @@
                                         <a href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#AddAttachmentModal">
                                             <i class="bi bi-paperclip"></i> Upload
                                         </a>
-                                        <a href="#" class="btn btn-primary btn-sm"><i class="bi bi-pencil-square"></i> Edit</a>
+                                        <a href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#EditTicketModal"><i class="bi bi-pencil-square"></i> Edit</a>
                                         <a href="#" class="btn btn-primary btn-sm"><i class="bi bi-arrow-right-circle"></i> Transfer</a>
 
                                         <!-- Upload Attachment Modal -->
                                         {% include "tickets/includes/upload-attachment-modal.html" %}
+
+                                        <!-- Edit Ticket Modal -->
+                                        {% include "tickets/includes/edit-ticket-modal.html" %}
 
 
 

@@ -1,5 +1,4 @@
-
-<div class="modal fade" id="AddAttachmentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="EditTicketModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -10,19 +9,15 @@
             <form class="row g-3" method="POST" enctype="multipart/form-data" novalidate>
                 {% csrf_token %}
 
-                <div class="modal-body">
+                <div class="modal-body mx-1">
                     <div class="col-12">
-                        <label class="form-label">{{ attachment_form.attachment.label }}</label>
-                        {{ attachment_form.attachment }}
-                        {% for field, error in attachment_form.errors.items %}
-                        {{ error }}
-                        {% endfor %}
+                        {{ticket_form}}
                     </div>
                 </div>
 
                 <div class="modal-footer">
                     <a href="#" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</a>
-                    <button type="submit" class="btn btn-primary" name="add-attachment">Upload</button>
+                    <button type="submit" class="btn btn-primary" name="edit-ticket">Save</button>
                 </div>
 
             </form>

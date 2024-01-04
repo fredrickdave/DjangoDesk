@@ -21,6 +21,7 @@ def ticket_details(request, ticket_number):
 
     comment_form = TicketCommentForm()
     attachment_form = TicketAttachmentForm(file_count=ticket_file_count)
+    ticket_form = TicketForm(instance=selected_ticket)
     if request.method == "POST":
         if "add-comment" in request.POST:
             comment_form = TicketCommentForm(data=request.POST)
@@ -42,11 +43,21 @@ def ticket_details(request, ticket_number):
                 # https://docs.djangoproject.com/en/5.0/ref/forms/api/#django.forms.ErrorList.as_text
                 error = attachment_form.errors["attachment"].as_text().replace("*", "")
                 messages.error(request=request, message=error)
+        elif "edit-ticket" in request.POST:
+            ticket_form = TicketForm(instance=selected_ticket, data=request.POST)
+            if ticket_form.is_valid():
+                ticket_form.save()
+                messages.success(request=request, message="Change saved successfully.")
+            else:
+                messages.error(
+                    request=request, message="Ticket Update failed. Please make sure to answer all required fields."
+                )
 
     context = {
         "selected_ticket": selected_ticket,
         "comment_form": comment_form,
         "attachment_form": attachment_form,
+        "ticket_form": ticket_form,
         "ticket_comments": ticket_comments,
     }
     return render(request=request, template_name="tickets/ticket-detail.html", context=context)
