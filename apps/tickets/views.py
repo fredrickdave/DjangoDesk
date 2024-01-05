@@ -17,12 +17,17 @@ def all_user_tickets(request):
 def ticket_details(request, ticket_number):
     selected_ticket = get_object_or_404(Ticket, ticket_number=ticket_number)
     ticket_comments = selected_ticket.comments.all().order_by("-created_at")
-    ticket_file_count = len(selected_ticket.attachments.all())
+    ticket_file_count = selected_ticket.attachments.all().count()
 
     comment_form = TicketCommentForm()
     attachment_form = TicketAttachmentForm(file_count=ticket_file_count)
     ticket_form = TicketForm(instance=selected_ticket)
     if request.method == "POST":
+        # Only ticket author is allowed to make modifications
+        if request.user != selected_ticket.created_by:
+            messages.error(request=request, message="You are not authorized to perform this action.")
+            return redirect(to="ticket-details", ticket_number=ticket_number)
+
         if "add-comment" in request.POST:
             comment_form = TicketCommentForm(data=request.POST)
             if comment_form.is_valid():
