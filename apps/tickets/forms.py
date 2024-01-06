@@ -56,9 +56,10 @@ class MultipleFileField(forms.FileField):
 class TicketAttachmentForm(ModelForm):
     def __init__(self, *args, **kwargs):
         self.max_files = 10
-        if kwargs["file_count"] is not None:
+        print("KWARGS", kwargs.get("file_count"))
+        if kwargs.get("file_count") is not None:
             self.file_count = kwargs.pop("file_count")
-        if kwargs["new_ticket"] is not None:
+        if kwargs.get("new_ticket") is not None:
             self.new_ticket = kwargs.pop("new_ticket")
         super().__init__(*args, **kwargs)
 

@@ -20,7 +20,7 @@ def ticket_details(request, ticket_number):
     ticket_file_count = selected_ticket.attachments.all().count()
 
     comment_form = TicketCommentForm()
-    attachment_form = TicketAttachmentForm(file_count=ticket_file_count, new_ticket=False)
+    attachment_form = TicketAttachmentForm(new_ticket=False)
     ticket_form = TicketForm(instance=selected_ticket)
     if request.method == "POST":
         # Only ticket author is allowed to make modifications
@@ -42,13 +42,13 @@ def ticket_details(request, ticket_number):
                 data=request.POST, files=request.FILES, file_count=ticket_file_count, new_ticket=False
             )
             if attachment_form.is_valid():
-                files = attachment_form.cleaned_data["attachment"]
+                files = attachment_form.cleaned_data.get("attachment")
                 create_attachment(files=files, ticket=selected_ticket)
                 messages.success(request=request, message="Attachment has been added successfully.")
                 return redirect(to="ticket-details", ticket_number=ticket_number)
             else:
                 # https://docs.djangoproject.com/en/5.0/ref/forms/api/#django.forms.ErrorList.as_text
-                error = attachment_form.errors["attachment"].as_text().replace("*", "")
+                error = attachment_form.errors.get("attachment").as_text().replace("*", "")
                 messages.error(request=request, message=error)
         elif "edit-ticket" in request.POST:
             ticket_form = TicketForm(instance=selected_ticket, data=request.POST)
