@@ -13,22 +13,8 @@ class BaseModel(models.Model):
         abstract = True
 
 
-class UserRole(BaseModel):
-    # https://docs.djangoproject.com/en/4.2/ref/models/fields/#choices
-    class Role(models.IntegerChoices):
-        ADMIN = 1, "Administrator"
-        AGENT = 2, "Support Agent"
-        CUSTOMER = 3, "Customer"
-
-    role = models.IntegerField(choices=Role.choices, unique=True, null=True, blank=True)
-
-    def __str__(self) -> str:
-        # https://docs.djangoproject.com/en/4.2/ref/models/instances/#django.db.models.Model.get_FOO_display
-        return self.get_role_display()
-
-
 class Department(BaseModel):
-    department = models.CharField(max_length=50, null=True, blank=True)
+    department = models.CharField(max_length=50, blank=True)
 
     def __str__(self) -> str:
         return self.department
@@ -69,16 +55,22 @@ class CustomUserManager(BaseUserManager):
 
 
 class User(AbstractUser):
+    # https://docs.djangoproject.com/en/4.2/ref/models/fields/#choices
+    class Role(models.IntegerChoices):
+        ADMIN = 1, "Administrator"
+        AGENT = 2, "Support Agent"
+        CUSTOMER = 3, "Customer"
+
     username = None
     email = models.EmailField(unique=True)
     avatar = ResizedImageField(null=True, blank=True, size=[300, 300], keep_meta=False, upload_to="images")
-    about = models.TextField(max_length=1500, null=True, blank=True)
-    role = models.ForeignKey(UserRole, null=True, blank=True, on_delete=models.SET_NULL, related_name="users")
-    job = models.CharField(max_length=50, null=True, blank=True)
+    about = models.TextField(max_length=1500, blank=True)
+    role = models.IntegerField(choices=Role.choices, default=Role.CUSTOMER)
+    job = models.CharField(max_length=50, blank=True)
     department = models.ForeignKey(Department, null=True, blank=True, on_delete=models.SET_NULL, related_name="users")
-    company = models.CharField(max_length=50, null=True, blank=True)
-    phone = models.CharField(max_length=50, null=True, blank=True)
-    linkedin = models.URLField(max_length=500, null=True, blank=True)
+    company = models.CharField(max_length=50, blank=True)
+    phone = models.CharField(max_length=50, blank=True)
+    linkedin = models.URLField(max_length=500, blank=True)
 
     # https://docs.djangoproject.com/en/4.2/topics/auth/customizing/#django.contrib.auth.models.CustomUser
     USERNAME_FIELD = "email"

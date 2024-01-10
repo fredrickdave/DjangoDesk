@@ -5,7 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import TicketAttachmentForm, TicketCommentForm, TicketForm
-from .models import Reference, Ticket, TicketAttachment, TicketPriority, TicketStatus
+from .models import Reference, Ticket, TicketAttachment
 from .tables import TicketTable
 
 
@@ -22,6 +22,7 @@ class TableView(LoginRequiredMixin, tables.SingleTableView):
 @login_required
 def ticket_details(request, ticket_number):
     selected_ticket = get_object_or_404(Ticket, ticket_number=ticket_number)
+    print(selected_ticket.status)
     ticket_comments = selected_ticket.comments.all().order_by("-created_at")
     ticket_file_count = selected_ticket.attachments.all().count()
 
@@ -95,13 +96,9 @@ def create_ticket(request):
         ticket_form = TicketForm(data=request.POST, files=request.FILES)
         attachment_form = TicketAttachmentForm(data=request.POST, files=request.FILES, file_count=0, new_ticket=True)
         if ticket_form.is_valid() and attachment_form.is_valid():
-            default_priority = TicketPriority.objects.get(priority=2)
-            default_status = TicketStatus.objects.get(status=1)
             ticket = ticket_form.save(commit=False)
             ticket.created_by = request.user
             ticket.ticket_number = Reference.generate(prefix="INC")
-            ticket.status = default_status
-            ticket.priority_id = default_priority
             ticket.save()
 
             files = attachment_form.cleaned_data["attachment"]
