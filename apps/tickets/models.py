@@ -119,7 +119,7 @@ class Ticket(BaseModel):
         return self.summary
 
     def get_absolute_url(self):
-        """This is used by the table to generate a link to the task detail page."""
+        """This is used by the table to generate a link to the ticket detail page."""
         return reverse("ticket-details", kwargs={"ticket_number": self.ticket_number})
 
 
