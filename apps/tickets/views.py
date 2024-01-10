@@ -1,16 +1,22 @@
+import django_tables2 as tables
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import TicketAttachmentForm, TicketCommentForm, TicketForm
 from .models import Reference, Ticket, TicketAttachment, TicketPriority, TicketStatus
+from .tables import TicketTable
 
 
-@login_required
-def all_user_tickets(request):
-    all_tickets = request.user.created_tickets.all()
-    context = {"tickets": all_tickets, "page": "all-tickets"}
-    return render(request=request, template_name="tickets/all-user-tickets.html", context=context)
+class TableView(LoginRequiredMixin, tables.SingleTableView):
+    model = Ticket
+    table_class = TicketTable
+    template_name = "tickets/all-user-tickets.html"
+
+    def get_queryset(self, **kwargs):
+        qs = super().get_queryset(**kwargs)
+        return qs.filter(created_by=self.request.user)
 
 
 @login_required

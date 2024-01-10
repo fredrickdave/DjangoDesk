@@ -3,6 +3,7 @@ import os
 import magic
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.urls import reverse
 from django.utils import timezone
 
 from ..users.models import User
@@ -116,6 +117,10 @@ class Ticket(BaseModel):
 
     def __str__(self) -> str:
         return self.summary
+
+    def get_absolute_url(self):
+        """This is used by the table to generate a link to the task detail page."""
+        return reverse("ticket-details", kwargs={"ticket_number": self.ticket_number})
 
 
 class TicketComment(BaseModel):

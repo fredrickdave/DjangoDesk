@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     "django.forms",
     # https://github.com/un1t/django-cleanup
     "django_cleanup.apps.CleanupConfig",
+    "django_tables2",
 ]
 
 # https://docs.djangoproject.com/en/4.2/ref/forms/renderers/#templatessetting
