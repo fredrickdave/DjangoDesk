@@ -13,10 +13,20 @@ class TableView(LoginRequiredMixin, tables.SingleTableView):
     model = Ticket
     table_class = TicketTable
     template_name = "tickets/all-user-tickets.html"
+    paginate_by = 2
 
     def get_queryset(self, **kwargs):
         qs = super().get_queryset(**kwargs)
         return qs.filter(created_by=self.request.user)
+
+    def get_template_names(self):
+        print(bool(self.request.htmx))
+        if self.request.htmx:
+            template_name = "tickets/table/ticket_table_partial.html"
+        else:
+            template_name = "tickets/all-user-tickets.html"
+
+        return template_name
 
 
 @login_required

@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     # https://github.com/un1t/django-cleanup
     "django_cleanup.apps.CleanupConfig",
     "django_tables2",
+    "django_htmx",
 ]
 
 # https://docs.djangoproject.com/en/4.2/ref/forms/renderers/#templatessetting
@@ -74,6 +75,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django_htmx.middleware.HtmxMiddleware",
 ]
 
 ROOT_URLCONF = "ticket_management.urls"

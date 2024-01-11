@@ -141,6 +141,9 @@ class TicketAttachment(BaseModel):
     )
     ticket = models.ForeignKey(Ticket, null=True, on_delete=models.CASCADE, related_name="attachments")
 
+    def __str__(self) -> str:
+        return self.attachment.name
+
     @property
     def attachment_name(self):
         return os.path.basename(self.attachment.name)

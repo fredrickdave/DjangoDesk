@@ -9,7 +9,7 @@ class TicketTable(tables.Table):
 
     class Meta:
         model = Ticket
-        template_name = "django_tables2/bootstrap5-responsive.html"
+        template_name = "tickets/table/bootstrap_htmx.html"
         fields = (
             "ticket_number",
             "summary",
