@@ -9,9 +9,15 @@
             <form class="row g-3" method="POST" enctype="multipart/form-data" novalidate>
                 {% csrf_token %}
 
-                <div class="modal-body mx-1">
+                <div class="modal-body mx-2">
                     <div class="col-12">
-                        {{ticket_form}}
+                        {% for form_field in ticket_form %}
+                            <div class="col-12 mb-3">
+                                <label for="{{ form_field.auto_id }}" class="form-label">{{ form_field.label }}</label>
+                                {{ form_field }}
+                                {{ form_field.errors }}
+                            </div>
+                        {% endfor %}
                     </div>
                 </div>
 
