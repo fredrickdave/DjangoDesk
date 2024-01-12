@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     "django_cleanup.apps.CleanupConfig",
     "django_tables2",
     "django_htmx",
+    "django_filters",
 ]
 
 # https://docs.djangoproject.com/en/4.2/ref/forms/renderers/#templatessetting
