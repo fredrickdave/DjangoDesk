@@ -9,7 +9,7 @@ class TicketTable(tables.Table):
 
     class Meta:
         model = Ticket
-        template_name = "tickets/table/bootstrap_htmx.html"
+        template_name = "tickets/table/bootstrap-htmx.html"
         fields = (
             "ticket_number",
             "summary",

@@ -145,7 +145,7 @@
     <!-- End History Nav -->
 
     <li class="nav-item">
-      <a class="nav-link collapsed" href="{% url "profile" %}">
+      <a class="nav-link {% if page != "profile" %}collapsed{% endif %}" href="{% url "profile" %}">
         <i class="bi bi-person"></i>
         <span>Account</span>
       </a>

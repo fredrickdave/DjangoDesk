@@ -6,35 +6,35 @@
 {% block title %}My Tickets{% endblock title %} 
 
 {% block content %}
-    <div class="pagetitle">
-        <h1>Tickets</h1>
-        <nav>
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url "dashboard" %}">Home</a></li>
-            <li class="breadcrumb-item active">Tickets</li>
-        </ol>
-        </nav>
-    </div>
-    <!-- End Page Title -->
+  <div class="pagetitle">
+    <h1>Tickets</h1>
+    <nav>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url "dashboard" %}">Home</a></li>
+      <li class="breadcrumb-item active">Tickets</li>
+    </ol>
+    </nav>
+  </div>
+  <!-- End Page Title -->
 
-    <section class="section">
-        <div class="row">
+  <section class="section">
+    <div class="row">
 
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">All Tickets</h5>
-                        <form hx-get="{% url "all-tickets" %}" hx-target="div.table-container" hx-swap="outerHTML" hx-indicator=".progress" class="form-inline">
-                        {{ form.as_p }}
-                        <button type="submit">Submit</button>
-                        </form>
-                        {% render_table table %}
-                    </div>
-                </div>
-            </div>
-
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">All Tickets</h5>
+            <form hx-get="{% url "all-tickets" %}" hx-target="div.table-container" hx-swap="outerHTML" hx-indicator=".progress" class="form-inline">
+            {{ form.as_p }}
+            <button type="submit">Submit</button>
+            </form>
+            {% render_table table %}
+          </div>
         </div>
-    </section>
+      </div>
+
+    </div>
+  </section>
 
 <!-- End #main -->
 {% endblock content %}

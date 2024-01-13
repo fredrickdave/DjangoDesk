@@ -5,55 +5,55 @@
 {% block title %}Create New Ticket{% endblock title %} 
 
 {% block content %}
-    <div class="pagetitle">
-        <h1>Dashboard</h1>
-        <nav>
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url "dashboard" %}">Home</a></li>
-            <li class="breadcrumb-item"><a href="{% url "all-tickets" %}">Tickets</a></li>
-            <li class="breadcrumb-item active">Create Ticket</li>
-        </ol>
-        </nav>
-    </div>
-    <!-- End Page Title -->
+  <div class="pagetitle">
+    <h1>Dashboard</h1>
+    <nav>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url "dashboard" %}">Home</a></li>
+      <li class="breadcrumb-item"><a href="{% url "all-tickets" %}">Tickets</a></li>
+      <li class="breadcrumb-item active">Create Ticket</li>
+    </ol>
+    </nav>
+  </div>
+  <!-- End Page Title -->
 
-    <section class="section">
-        <div class="row">
+  <section class="section">
+    <div class="row">
 
-            <div class="col-lg-6">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Create Ticket</h5>
-                        <form class="row g-3" action="{% url "create-ticket" %}" method="POST" enctype="multipart/form-data" novalidate>
-                            {% csrf_token %}
+      <div class="col-lg-6">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Create Ticket</h5>
+            <form class="row g-3" action="{% url "create-ticket" %}" method="POST" enctype="multipart/form-data" novalidate>
 
-                                {% for form_field in ticket_form %}
-                                    <div class="col-12">
-                                        <label for="{{ form_field.auto_id }}" class="form-label">{{ form_field.label }}</label>
-                                        {{ form_field }}
-                                        {{ form_field.errors }}
-                                    </div>
-
-                                {% endfor %}
-                                <div class="col-12">
-                                    <label class="form-label">{{ attachment_form.attachment.label }}</label>
-                                    {{ attachment_form.attachment }}
-                                    {% for field, error in attachment_form.errors.items %}
-                                    {{ error }}
-                                    {% endfor %}
-                                </div>
-                             
-                                <div class="text-center">
-                                    <button type="submit" class="btn btn-primary" name="add-attachment">Submit Ticket</button>
-                                    <button type="reset" class="btn btn-secondary">Reset</button>
-                                </div>
-                            </form>
-                    </div>
+              {% csrf_token %}
+              {% for form_field in ticket_form %}
+                <div class="col-12">
+                    <label for="{{ form_field.auto_id }}" class="form-label">{{ form_field.label }}</label>
+                    {{ form_field }}
+                    {{ form_field.errors }}
                 </div>
-            </div>
+              {% endfor %}
+              <div class="col-12">
+                <label class="form-label">{{ attachment_form.attachment.label }}</label>
+                {{ attachment_form.attachment }}
+                {% for field, error in attachment_form.errors.items %}
+                {{ error }}
+                {% endfor %}
+              </div>
+            
+              <div class="text-center">
+                <button type="submit" class="btn btn-primary" name="add-attachment">Submit Ticket</button>
+                <button type="reset" class="btn btn-secondary">Reset</button>
+              </div>
 
+            </form>
+          </div>
         </div>
-    </section>
+      </div>
+
+    </div>
+  </section>
 
 <!-- End #main -->
 {% endblock content %}

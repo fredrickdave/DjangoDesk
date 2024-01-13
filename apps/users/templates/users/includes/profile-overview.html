@@ -1,0 +1,30 @@
+<div class="tab-pane fade show active profile-overview" id="profile-overview">
+{% if request.user.about %}
+    <h5 class="card-title">About</h5>
+    <p class="small fst-italic">{{ request.user.about }}</p>
+{% endif %}
+
+<h5 class="card-title">Profile Details</h5>
+
+{% for form_field in edit_profile_form %}
+
+  {% if form_field.label != "About" and form_field.label != "Avatar" %}
+    <div class="row">
+        <div class="col-lg-3 col-md-4 label">{{ form_field.label }}</div>
+        <div class="col-lg-9 col-md-8">
+          {% if form_field.label != "Department" %}
+              {% if form_field.value %}
+                  {{ form_field.value }}
+              {% else %}
+                -
+              {% endif %}
+
+          {% else %}
+            {% if request.user.department %}{{ request.user.department }}{% else %}-{% endif %}
+          {% endif %}
+        </div>
+    </div>
+  {% endif %}
+
+{% endfor %}
+</div>

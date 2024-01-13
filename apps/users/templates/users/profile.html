@@ -1,7 +1,7 @@
 {% extends "base.html" %} 
 {% load static %}
 
-{% block title %}Profile{% endblock title %}Profile
+{% block title %}Profile{% endblock title %}
 
 {% block content %}
 
@@ -20,32 +20,8 @@
 <section class="section profile">
   <div class="row">
     <div class="col-xl-4">
-      <div class="card">
-        <div
-          class="card-body profile-card pt-4 d-flex flex-column align-items-center"
-        >
-          <h5 class="card-title">Profile Card</h5>
-          <img
-            src="{% if request.user.avatar %}{{ request.user.avatar.url }}{% else %}{% static "img/profile.png" %}{% endif %}"
-            alt="Profile"
-            class="rounded-circle"
-          />
-
-          {% if request.user.get_full_name %}<h2>
-            {{request.user.get_full_name}}</h2>
-          {% endif %}
-
-          {% if request.user.job %}
-          <h3>{{request.user.job}}</h3>
-          {% endif %}
-
-          <div class="social-links mt-2">
-            {% if request.user.linkedin %}
-            <a href="{{ request.user.linkedin }}" class="linkedin"><i class="bi bi-linkedin"></i></a>
-            {% endif %}
-          </div>
-        </div>
-      </div>
+      <!-- Profile Card -->
+      {% include "users/includes/profile-card.html" %}
     </div>
 
     <div class="col-xl-8">
@@ -94,140 +70,17 @@
             </li>
           </ul>
           <div class="tab-content pt-2">
-            <div
-              class="tab-pane fade show active profile-overview"
-              id="profile-overview"
-            >
-              {% if request.user.about %}
-              <h5 class="card-title">About</h5>
-              <p class="small fst-italic">
-                {{ request.user.about }}
-              </p>
-              {% endif %}
+            <!-- Profile Overview Form -->
+            {% include "users/includes/profile-overview.html" %}
 
-              <h5 class="card-title">Profile Details</h5>
+            <!-- Edit Profile Form -->
+            {% include "users/includes/edit-profile-form.html" %}
 
-              {% for form_field in edit_profile_form %}
+            <!-- Change Email Form -->
+            {% include "users/includes/change-email-form.html" %}
 
-                {% if form_field.label != "About" and form_field.label != "Avatar" %}
-                <div class="row">
-                  <div class="col-lg-3 col-md-4 label">{{ form_field.label }}</div>
-                  <div class="col-lg-9 col-md-8">
-                    {% if form_field.label != "Department" %}
-                      {% if form_field.value %}
-                      {{ form_field.value }}
-                      {% else %}
-                      -
-                      {% endif %}
-                    {% else %}
-                      {% if request.user.department %}{{ request.user.department }}{% else %}-{% endif %}
-                    {% endif %}</div>
-                </div>
-                {% endif %}
-
-              {% endfor %}
-
-            </div>
-
-            <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
-              <!-- Profile Edit Form -->
-              <!-- No need to add action to form if we're redirecting to the same current URL -->
-              <form method="POST" action="{% url "profile" %}" enctype="multipart/form-data">
-                {% csrf_token %}
-                <div class="row mb-3">
-                  <label
-                    for="profileImage"
-                    class="col-md-4 col-lg-3 col-form-label"
-                    >Profile Image</label
-                  >
-                  <div class="col-md-8 col-lg-9">
-                    {% if request.user.avatar %}
-                    <img src="{{ request.user.avatar.url }}" alt="Profile" />
-                    {% endif %}
-
-                      <div class="col-md-8 col-lg-12">
-                      {{ edit_profile_form.avatar }}
-                      </div>
-                  </div>
-
-                </div>
-
-                  {% for form_field in edit_profile_form %}
-
-                  {% if form_field.label != "Avatar" %}
-                  <div class="row mb-3">
-                    <label
-                      for="{{ form_field.auto_id }}"
-                      class="col-md-4 col-lg-3 col-form-label"
-                      >{{form_field.label}}</label
-                    >
-                    <div class="col-md-8 col-lg-9">{{ form_field }}</div>
-                    {{ form_field.errors }}
-                  </div>
-                  {% endif %}
-
-                  {% endfor %}
-            
-
-                <div class="text-center">
-                  <button type="submit" class="btn btn-primary" name="update-profile">
-                    Save Changes
-                  </button>
-                </div>
-              </form>
-              <!-- End Profile Edit Form -->
-            </div>
-
-            <div class="tab-pane fade pt-3" id="profile-change-email">
-              <!-- Change Email Form -->
-              <form method="POST" action="{% url "profile" %}" novalidate>
-
-                  {% csrf_token %}
-
-                  {% for form_field in change_email_form %}
-                  <div class="row mb-3">
-                      <label for="{{ form_field.auto_id }}" class="col-md-4 col-lg-3 col-form-label">{{form_field.label}}</label>
-                      <div class="col-md-8 col-lg-9">
-                      {{ form_field }}
-                      {{ form_field.errors }}
-                      </div>
-                  </div>
-                  {% endfor %}
-
-                <div class="text-center">
-                  <button type="submit" class="btn btn-primary" name="update-email">
-                    Change Email
-                  </button>
-                </div>
-              </form>
-              <!-- End Change Email Form -->
-            </div>
-
-
-            <div class="tab-pane fade pt-3" id="profile-change-password">
-              <!-- Change Password Form -->
-              <form method="POST" action="{% url "profile" %}" novalidate>
-
-                  {% csrf_token %}
-
-                  {% for form_field in change_password_form %}
-                  <div class="row mb-3">
-                      <label for="{{ form_field.auto_id }}" class="col-md-4 col-lg-3 col-form-label">{{form_field.label}}</label>
-                      <div class="col-md-8 col-lg-9">
-                      {{ form_field }}
-                      {{ form_field.errors }}
-                      </div>
-                  </div>
-                  {% endfor %}
-
-                <div class="text-center">
-                  <button type="submit" class="btn btn-primary" name="update-password">
-                    Change Password
-                  </button>
-                </div>
-              </form>
-              <!-- End Change Password Form -->
-            </div>
+            <!-- Change Paswword Form -->
+            {% include "users/includes/change-password-form.html" %}
           </div>
           <!-- End Bordered Tabs -->
         </div>

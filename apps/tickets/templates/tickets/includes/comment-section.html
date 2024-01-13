@@ -2,54 +2,59 @@
 
 <!-- Comment Form -->
 <div class="row">
-    
-    <div class="col-lg-8">
-        <hr class="">
-        <h5 class="pt-3 pe-5">Add Comment</h5>
-        <form class="row g-3" method="POST" novalidate>
-            {% csrf_token %}
-            {% for form_field in comment_form %}
-            {{ form_field }}
-            {{form_field.errors}}
-            {% endfor %}
-            <button class="btn btn-primary" type="submit" name="add-comment">Submit</button>
-        </form>
-    </div>
+  <div class="col-lg-8">
+    <hr class="">
+    <h5 class="pt-3 pe-5">Add Comment</h5>
+    <form class="row g-3" method="POST" novalidate>
+        {% csrf_token %}
+        {% for form_field in comment_form %}
+          {{ form_field }}
+          {{form_field.errors}}
+        {% endfor %}
+        <button class="btn btn-primary" type="submit" name="add-comment">Submit</button>
+    </form>
+  </div>
 </div>
 <!-- End Comment Form -->
 
 <!-- Comment Section -->
 <div class="row">
-    <div class="col-lg-8">
-        <h5 class="mt-5">All Comments</h5>
+  <div class="col-lg-8">
+    <h5 class="mt-5">All Comments</h5>
 
-        {% if ticket_comments %}
-        {% for comment in ticket_comments %}
-        <div class="card">
-            <div class="card-comment">
-                <div class="comment-header">
-                    {% if comment.created_by %}
-                    <img src="{% if comment.created_by.avatar %}{{ comment.created_by.avatar.url }}{% else %}{% static "img/profile.png" %}{% endif %}" alt="Profile" class="rounded-circle asignee-avatar" />
-                    {% endif %}
-                    {% if comment.created_by.get_full_name %}
-                    {{ comment.created_by.get_full_name }}
-                    {% else %}
-                    {{ comment.created_by }}
-                    {% endif %}
-                    <span class="mx-1">&bullet;</span>
-                    {{ comment.created_at }}
-                </div>
-                <div class="mt-3">
-                {{ comment }}
-                </div>
-            </div>
-        </div>
-        {% endfor %}
-        {% else  %}
+    {% if ticket_comments %}
+      {% for comment in ticket_comments %}
+      <div class="card">
         <div class="card-comment">
-            <div>There are no comments yet.</div>
+          <div class="comment-header">
+            {% if comment.created_by %}
+              <img src="{% if comment.created_by.avatar %}{{ comment.created_by.avatar.url }}{% else %}{% static "img/profile.png" %}{% endif %}"
+              alt="Profile"
+              class="rounded-circle asignee-avatar"/>
+            {% endif %}
+
+            {% if comment.created_by.get_full_name %}
+              {{ comment.created_by.get_full_name }}
+            {% else %}
+              {{ comment.created_by }}
+            {% endif %}
+
+            <span class="mx-1">&bullet;</span>
+            {{ comment.created_at }}
+          </div>
+
+          <div class="mt-3">
+            {{ comment }}
+          </div>
+
         </div>
-        {% endif %}
-    </div>
+      </div>
+      {% endfor %}
+    {% else  %}
+      <div class="card-comment">
+        <div>There are no comments yet.</div>
+      </div>
+    {% endif %}
+  </div>
 </div>
 <!-- End Comment Section -->
