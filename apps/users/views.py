@@ -99,5 +99,6 @@ def profile(request):
         "edit_profile_form": edit_profile_form,
         "change_email_form": change_email_form,
         "change_password_form": change_password_form,
+        "page": "profile",
     }
     return render(request=request, template_name="users/profile.html", context=context)
