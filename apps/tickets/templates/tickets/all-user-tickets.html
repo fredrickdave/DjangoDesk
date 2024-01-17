@@ -1,8 +1,5 @@
 {% extends "base.html" %} 
 
-{% load static %}
-{% load render_table from django_tables2 %}
-
 {% block title %}My Tickets{% endblock title %} 
 
 {% block content %}
@@ -23,12 +20,8 @@
       <div class="col-lg-12">
         <div class="card">
           <div class="card-body">
-            <h5 class="card-title">All Tickets</h5>
-            <form hx-get="{% url "all-tickets" %}" hx-target="div.table-container" hx-swap="outerHTML" hx-indicator=".progress" class="form-inline">
-            {{ form.as_p }}
-            <button type="submit">Submit</button>
-            </form>
-            {% render_table table %}
+            <!-- Ticket Details Section -->
+            {% include "tickets/includes/ticket-filter-form.html" %}
           </div>
         </div>
       </div>

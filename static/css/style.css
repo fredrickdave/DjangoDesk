@@ -1306,11 +1306,11 @@ h6 {
 }
 
 .table-container table td:nth-child(2) {
-  width: 50%;
+  width: 40%;
 }
 
 .table-container table td:nth-child(3) {
-  width: 7%;
+  width: 10%;
 }
 
 /* Progress bar */

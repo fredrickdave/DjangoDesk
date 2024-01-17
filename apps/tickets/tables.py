@@ -13,7 +13,8 @@ class TicketTable(tables.Table):
         fields = (
             "ticket_number",
             "summary",
+            "issue_type",
             "status",
-            "created_by",
             "created_at",
+            "created_by",
         )

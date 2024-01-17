@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     "django_tables2",
     "django_htmx",
     "django_filters",
+    "widget_tweaks",
 ]
 
 # https://docs.djangoproject.com/en/4.2/ref/forms/renderers/#templatessetting

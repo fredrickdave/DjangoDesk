@@ -1,0 +1,49 @@
+{% load render_table from django_tables2 %}
+{% load widget_tweaks %}
+
+<h5 class="card-title">My Tickets</h5>
+<form hx-get="{% url "all-tickets" %}" hx-target="div.table-container" hx-swap="outerHTML" hx-indicator=".progress" class="form-inline row g-3">
+
+    <div class="fw-semibold">Filters:</div>
+    <div class="col-lg-2 col-md-12">
+      <div class="form-floating">
+        {% render_field filter_form.ticket_number class="form-control" id="floatingTicket" placeholder="Ticket Number" %}
+        <label for="floatingTicket">Ticket Number</label>
+      </div>
+    </div>
+
+    <div class=" col-lg-2 col-md-12">
+      <div class="form-floating">
+        {% render_field filter_form.summary class="form-control" id="floatingSummary" placeholder="" %}
+        <label for="floatingSummary">Summary</label>
+      </div>
+    </div>
+
+    <div class=" col-lg-2 col-md-12">
+      <div class="form-floating">
+        {% render_field filter_form.issue_type class="form-control" id="floatingIssueType" aria-label="Issue Type" %}
+        <label for="floatingIssueType">Issue Type</label>
+      </div>
+    </div>
+
+    <div class=" col-lg-2 col-md-12">
+      <div class="form-floating">
+        {% render_field filter_form.status class="form-control" id="floatingStatus" aria-label="Status" %}
+        <label for="floatingStatus">Status</label>
+      </div>
+    </div>
+
+    <div class=" col-lg-2 col-md-12">
+      <div class="form-floating">
+        {% render_field filter_form.created_at class="form-control" id="floatingDate" aria-label="Created At" %}
+        <label for="floatingDate">Created At</label>
+      </div>
+    </div>
+
+    <div class="col-lg-2 col-md-12">
+        <button type="submit" class="btn btn-primary btn-sm p-3" name="ticket-filter">Submit</button>
+      
+    </div>
+
+</form>
+{% render_table table %}
