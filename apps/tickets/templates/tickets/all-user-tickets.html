@@ -1,4 +1,5 @@
 {% extends "base.html" %} 
+{% load render_table from django_tables2 %}
 
 {% block title %}My Tickets{% endblock title %} 
 
@@ -20,8 +21,14 @@
       <div class="col-lg-12">
         <div class="card">
           <div class="card-body">
+            
+            <h5 class="card-title">My Tickets</h5>
+
             <!-- Ticket Details Section -->
             {% include "tickets/includes/ticket-filter-form.html" %}
+
+            {% render_table table %}
+
           </div>
         </div>
       </div>

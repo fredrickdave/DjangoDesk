@@ -5,7 +5,7 @@ from .models import Ticket
 
 
 class TicketTable(tables.Table):
-    ticket_number = tables.Column(linkify=True)
+    ticket_number = tables.Column(linkify=True, attrs={"td": {"class": "fw-semibold"}})
 
     class Meta:
         model = Ticket
