@@ -91,6 +91,10 @@ class Ticket(BaseModel):
         """This is used by the table to generate a link to the ticket detail page."""
         return reverse("ticket-details", kwargs={"ticket_number": self.ticket_number})
 
+    def assign(self, user):
+        self.assigned_agent = user
+        self.save()
+
 
 class TicketComment(BaseModel):
     comment = models.TextField()

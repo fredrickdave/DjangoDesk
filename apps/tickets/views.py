@@ -45,10 +45,9 @@ class TableView(LoginRequiredMixin, tables.SingleTableMixin, FilterView):
 @login_required
 def ticket_details(request, ticket_number):
     selected_ticket = get_object_or_404(Ticket, ticket_number=ticket_number)
-    print(selected_ticket.status)
     ticket_comments = selected_ticket.comments.all().order_by("-created_at")
     ticket_file_count = selected_ticket.attachments.all().count()
-
+    print(selected_ticket.assigned_agent)
     comment_form = TicketCommentForm()
     attachment_form = TicketAttachmentForm(new_ticket=False)
     ticket_form = TicketForm(instance=selected_ticket)
@@ -151,4 +150,13 @@ def delete_attachment(request, ticket_number, pk):
         messages.success(request=request, message="Attachment has been deleted successfully.")
     else:
         messages.error(request=request, message="You are not authorized to perform this action.")
+    return redirect(to="ticket-details", ticket_number=ticket_number)
+
+
+def assign_ticket(request, ticket_number):
+    selected_ticket = get_object_or_404(Ticket, ticket_number=ticket_number)
+    if request.user.role == 1 or request.user.role == 2:
+        selected_ticket.assign(user=request.user)
+    else:
+        messages.error(request=request, message="You are not authorized to accept this ticket.")
     return redirect(to="ticket-details", ticket_number=ticket_number)
