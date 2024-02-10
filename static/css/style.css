@@ -1269,6 +1269,7 @@ h6 {
   color: #ffffff;
   font-size: 0.75rem;
   padding-left: 1%;
+  padding-right: 0.75%;
 }
 
 .attachment-label:hover {
@@ -1282,11 +1283,12 @@ h6 {
 }
 
 .delete-attachment-label:hover {
-  color: #ffffffc7;
+  color: #ce6767;
 }
 
 .attachment-badge {
   text-align: center;
+  white-space: nowrap;
 
 }
 

@@ -2,50 +2,62 @@
 <hr class="mt-3">
 
 <!-- Ticket Action Buttons -->
-{% if not selected_ticket.assigned_agent %}
+{% if request.user.role != 3 %}
 
-  <a href="#" class="btn btn-success btn-sm mt-1" data-bs-toggle="modal" data-bs-target="#AcceptTicketModal">
-    <i class="bi bi-check-circle"></i> Accept
-  </a>
+  {% if not selected_ticket.assigned_agent %}
 
-  <!-- Accept Ticket Modal -->
-  {% include "tickets/includes/accept-ticket-modal.html" %}
+    <a href="#" class="btn btn-success btn-sm mt-1" data-bs-toggle="modal" data-bs-target="#AcceptTicketModal">
+      <i class="bi bi-check-circle"></i> Accept
+    </a>
+
+    <!-- Accept Ticket Modal -->
+    {% include "tickets/includes/accept-ticket-modal.html" %}
+
+  {% else %}
+
+    <a href="#" class="btn btn-primary btn-sm mt-1"><i class="bi bi-arrow-right-circle"></i> Transfer</a>
+
+  {% endif %}
 
 {% endif %}
 
 
-<a href="#" class="btn btn-primary btn-sm mt-1" data-bs-toggle="modal" data-bs-target="#AddAttachmentModal">
-  <i class="bi bi-paperclip"></i> Upload
-</a>
+{% if request.user == selected_ticket.created_by %}
 
-<!-- Upload Attachment Modal -->
-{% include "tickets/includes/upload-attachment-modal.html" %}
+  <a href="#" class="btn btn-primary btn-sm mt-1" data-bs-toggle="modal" data-bs-target="#AddAttachmentModal">
+    <i class="bi bi-paperclip"></i> Upload
+  </a>
 
-
-<a href="#" class="btn btn-primary btn-sm mt-1" data-bs-toggle="modal" data-bs-target="#EditTicketModal"><i class="bi bi-pencil-square"></i> Edit</a>
-
-<!-- Edit Ticket Modal -->
-{% include "tickets/includes/edit-ticket-modal.html" %}
+  <!-- Upload Attachment Modal -->
+  {% include "tickets/includes/upload-attachment-modal.html" %}
 
 
-<a href="#" class="btn btn-primary btn-sm mt-1"><i class="bi bi-arrow-right-circle"></i> Transfer</a>
+  <a href="#" class="btn btn-primary btn-sm mt-1" data-bs-toggle="modal" data-bs-target="#EditTicketModal"><i class="bi bi-pencil-square"></i> Edit</a>
+
+  <!-- Edit Ticket Modal -->
+  {% include "tickets/includes/edit-ticket-modal.html" %}
+
+{% endif %}
 
 <!-- Attachment List -->
-<div class="mt-4 pe-5"><span class="fw-semibold">Attachments: </span>
+<div class="mt-4"><span class="fw-semibold">Attachments: </span>
   {% for attachment in selected_ticket.attachments.all %}
     <span class="text-bg-secondary rounded me-1 attachment-badge fw-bold">
       <a href="{{ attachment.url }}" target="_blank" class="attachment-label">
         {{ attachment.attachment_name }}
       </a>
 
-      <!-- Delete Attachment trigger modal -->
-      <a href="#" data-bs-toggle="modal" data-bs-target="#attachment{{ attachment.id }}Modal">
-        <i class="bi bi-x-lg delete-attachment-label"></i>
-      </a>
+      {% if request.user == selected_ticket.created_by %}
+        <!-- Delete Attachment trigger modal -->
+        <a href="#" data-bs-toggle="modal" data-bs-target="#attachment{{ attachment.id }}Modal">
+          <i class="bi bi-x-lg delete-attachment-label"></i>
+        </a>
+      {% endif %}
     </span>
 
-    <!-- Delete Attachment Modal -->
-    {% include "tickets/includes/delete-attachment-modal.html" %}
+      <!-- Delete Attachment Modal -->
+      {% include "tickets/includes/delete-attachment-modal.html" %}
+
   {% empty  %}
     No attachment
 
