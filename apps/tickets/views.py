@@ -1,5 +1,3 @@
-from typing import Any, Dict
-
 import django_tables2 as tables
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -13,7 +11,7 @@ from .models import Reference, Ticket, TicketAttachment
 from .tables import TicketTable
 
 
-class TableView(LoginRequiredMixin, tables.SingleTableMixin, FilterView):
+class AllTickets(LoginRequiredMixin, tables.SingleTableMixin, FilterView):
     model = Ticket
     table_class = TicketTable
     filterset_class = TicketFilter
@@ -48,6 +46,8 @@ def ticket_details(request, ticket_number):
     ticket_comments = selected_ticket.comments.all().order_by("-created_at")
     ticket_file_count = selected_ticket.attachments.all().count()
     print(selected_ticket.assigned_agent)
+    print(request.user.role)
+
     comment_form = TicketCommentForm()
     attachment_form = TicketAttachmentForm(new_ticket=False)
     ticket_form = TicketForm(instance=selected_ticket)
@@ -157,6 +157,7 @@ def assign_ticket(request, ticket_number):
     selected_ticket = get_object_or_404(Ticket, ticket_number=ticket_number)
     if request.user.role == 1 or request.user.role == 2:
         selected_ticket.assign(user=request.user)
+        messages.success(request=request, message="You've successfully accepted this ticket.")
     else:
         messages.error(request=request, message="You are not authorized to accept this ticket.")
     return redirect(to="ticket-details", ticket_number=ticket_number)
