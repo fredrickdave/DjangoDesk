@@ -1,8 +1,6 @@
 {% load static %}
 
-<!-- Comment Form -->
-<div class="row">
-  <div class="col-lg-8">
+    <!-- Comment Form -->
     <hr class="">
     <h5 class="pt-3 pe-5">Add Comment</h5>
     <form class="row g-3" method="POST" novalidate>
@@ -13,13 +11,9 @@
         {% endfor %}
         <button class="btn btn-primary" type="submit" name="add-comment">Submit</button>
     </form>
-  </div>
-</div>
-<!-- End Comment Form -->
+    <!-- End Comment Form -->
 
-<!-- Comment Section -->
-<div class="row">
-  <div class="col-lg-8">
+    <!-- Comment Section -->
     <h5 class="mt-5">All Comments</h5>
 
     {% for comment in ticket_comments %}
@@ -54,7 +48,5 @@
       <div>There are no comments yet.</div>
     </div>
     {% endfor %}
+    <!-- End Comment Section -->
 
-  </div>
-</div>
-<!-- End Comment Section -->
