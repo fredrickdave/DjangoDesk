@@ -88,7 +88,7 @@ class Ticket(BaseModel):
         return f"{self.ticket_number} - {self.summary}"
 
     def get_absolute_url(self):
-        """This is used by the table to generate a link to the ticket detail page."""
+        """This is used by django_tables2 to generate a link to the ticket detail page."""
         return reverse("ticket-details", kwargs={"ticket_number": self.ticket_number})
 
     def assign(self, user):
