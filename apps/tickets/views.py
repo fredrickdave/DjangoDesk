@@ -45,8 +45,6 @@ def ticket_details(request, ticket_number):
     selected_ticket = get_object_or_404(Ticket, ticket_number=ticket_number)
     ticket_comments = selected_ticket.comments.all().order_by("-created_at")
     ticket_file_count = selected_ticket.attachments.all().count()
-    print(selected_ticket.assigned_agent)
-    print(request.user.role)
 
     comment_form = TicketCommentForm()
     attachment_form = TicketAttachmentForm(new_ticket=False)
@@ -153,11 +151,49 @@ def delete_attachment(request, ticket_number, pk):
     return redirect(to="ticket-details", ticket_number=ticket_number)
 
 
+@login_required
 def assign_ticket(request, ticket_number):
     selected_ticket = get_object_or_404(Ticket, ticket_number=ticket_number)
     if request.user.role == 1 or request.user.role == 2:
-        selected_ticket.assign(user=request.user)
+        selected_ticket.assign_agent(user=request.user)
+        selected_ticket.set_status_assigned()
+        selected_ticket.save()
         messages.success(request=request, message="You've successfully accepted this ticket.")
+    else:
+        messages.error(request=request, message="You are not authorized to accept this ticket.")
+    return redirect(to="ticket-details", ticket_number=ticket_number)
+
+
+@login_required
+def update_ticket_status(request, ticket_number):
+    selected_ticket = get_object_or_404(Ticket, ticket_number=ticket_number)
+    if request.user.role == 1 or request.user.role == 2:
+        if "start" in request.POST or "resume" in request.POST:
+            selected_ticket.set_status_in_progress()
+            selected_ticket.save()
+            messages.success(request=request, message="This ticket is now In Progress.")
+        elif "close" in request.POST:
+            selected_ticket.set_status_close()
+            selected_ticket.save()
+            messages.success(request=request, message="This ticket is now closed.")
+        elif "resolve" in request.POST:
+            selected_ticket.set_status_resolved()
+            selected_ticket.save()
+            messages.success(request=request, message="This ticket is now resolved.")
+        elif "hold" in request.POST:
+            selected_ticket.set_status_on_hold()
+            selected_ticket.save()
+            messages.success(request=request, message="This ticket is now on hold status.")
+        elif "reopen" in request.POST:
+            selected_ticket.set_status_open()
+            if selected_ticket.assigned_agent:
+                messages.success(
+                    request=request,
+                    message=f"This ticket has been opened and reassigned to {selected_ticket.assigned_agent}.",
+                )
+            else:
+                messages.success(request=request, message="This ticket has been opened.")
+            selected_ticket.save()
     else:
         messages.error(request=request, message="You are not authorized to accept this ticket.")
     return redirect(to="ticket-details", ticket_number=ticket_number)

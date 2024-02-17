@@ -91,9 +91,36 @@ class Ticket(BaseModel):
         """This is used by django_tables2 to generate a link to the ticket detail page."""
         return reverse("ticket-details", kwargs={"ticket_number": self.ticket_number})
 
-    def assign(self, user):
-        self.assigned_agent = user
-        self.save()
+    def assign_agent(self, user):
+        if user.role == 1 or user.role == 2:
+            self.assigned_agent = user
+
+    def set_status_open(self):
+        "Set the ticket status to Open. If an agent was already assigned to ticket, status will be Assigned instead."
+        if self.assigned_agent:
+            self.status = 2
+        else:
+            self.status = 1
+
+    def set_status_assigned(self):
+        "Set the ticket status to Assigned."
+        self.status = 2
+
+    def set_status_in_progress(self):
+        "Set the ticket status to In Progress."
+        self.status = 3
+
+    def set_status_on_hold(self):
+        "Set the ticket status to On Hold."
+        self.status = 4
+
+    def set_status_resolved(self):
+        "Set the ticket status to Resolved."
+        self.status = 5
+
+    def set_status_close(self):
+        "Set the ticket status to Closed."
+        self.status = 6
 
 
 class TicketComment(BaseModel):

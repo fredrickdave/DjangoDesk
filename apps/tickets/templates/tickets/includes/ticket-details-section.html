@@ -4,7 +4,9 @@
 
 <div class="mb-2">
   <h5 class="card-title">Details</h5>
-  <div class="badge rounded-pill text-bg-success">{{ selected_ticket.get_status_display }}</div>
+  <div class="badge rounded-pill text-bg-{% if selected_ticket.status == 1 %}danger{% elif selected_ticket.status == 2 or selected_ticket.status == 3 or selected_ticket.status == 4 %}warning{% elif selected_ticket.status == 5 or selected_ticket.status == 6 %}success{% endif %}">
+    {{ selected_ticket.get_status_display }}
+  </div>
   <div class="mt-3"><span class="fw-semibold">Last updated: </span><i class="bi bi-calendar"></i> {{ selected_ticket.updated_at|date:"m/d/Y g:i A" }}</div>
   <div class="mt-3"><span class="fw-semibold">Created on: </span><i class="bi bi-calendar"></i> {{ selected_ticket.created_at|date:"m/d/Y g:i A" }}</div>
   <div class="mt-3"><span class="fw-semibold">Department: </span>{{ selected_ticket.created_by.department }}</div>

@@ -1,0 +1,28 @@
+
+<div class="modal fade" id="ResumeTicketModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Resume Ticket</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+
+          <form action="{% url "update-status" ticket_number=selected_ticket.ticket_number %}" class="row g-3" method="POST" enctype="multipart/form-data" novalidate>
+              {% csrf_token %}
+
+              <div class="modal-body mx-2">
+                  <div class="col-12">
+                    Are you sure you want to resume work on this ticket?
+                  </div>
+              </div>
+
+              <div class="modal-footer">
+                  <a href="#" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</a>
+                  <button type="submit" class="btn btn-primary" name="resume">Yes</button>
+              </div>
+
+          </form>
+
+      </div>
+  </div>
+</div>

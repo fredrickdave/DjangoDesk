@@ -1,0 +1,16 @@
+{% if request.user == selected_ticket.created_by %}
+
+  <a href="#" class="btn btn-primary btn-sm mt-1" data-bs-toggle="modal" data-bs-target="#AddAttachmentModal">
+    <i class="bi bi-paperclip"></i> Attach
+  </a>
+
+  <!-- Upload Attachment Modal -->
+  {% include "tickets/includes/modals/upload-attachment-modal.html" %}
+
+
+  <a href="#" class="btn btn-primary btn-sm mt-1" data-bs-toggle="modal" data-bs-target="#EditTicketModal"><i class="bi bi-pencil-square"></i> Edit</a>
+
+  <!-- Edit Ticket Modal -->
+  {% include "tickets/includes/modals/edit-ticket-modal.html" %}
+
+{% endif %}
