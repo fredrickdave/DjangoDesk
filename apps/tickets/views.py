@@ -80,6 +80,7 @@ def ticket_details(request, ticket_number):
         elif "edit-ticket" in request.POST:
             ticket_form = TicketForm(instance=selected_ticket, data=request.POST)
             if ticket_form.is_valid():
+                selected_ticket._change_reason = "Ticket details have been updated."
                 ticket_form.save()
                 messages.success(request=request, message="Change saved successfully.")
             else:
@@ -119,6 +120,7 @@ def create_ticket(request):
             ticket = ticket_form.save(commit=False)
             ticket.created_by = request.user
             ticket.ticket_number = Reference.generate(prefix="INC")
+            ticket._change_reason = "Ticket has been created."
             ticket.save()
 
             files = attachment_form.cleaned_data["attachment"]
@@ -189,7 +191,7 @@ def update_ticket_status(request, ticket_number):
             if selected_ticket.assigned_agent:
                 messages.success(
                     request=request,
-                    message=f"This ticket has been opened and reassigned to {selected_ticket.assigned_agent}.",
+                    message=f"Ticket has been reopened and reassigned to {selected_ticket.assigned_agent}.",
                 )
             else:
                 messages.success(request=request, message="This ticket has been opened.")

@@ -1,3 +1,17 @@
 <hr class="">
 <h5 class="pt-3 pe-5">Recent Activity</h5>
-<div>Test</div>
+
+  <section class="py-5">
+    <ul class="timeline">
+      {% for h in selected_ticket.history.all %}
+        <li class="timeline-item mb-3">
+          <div class=""> {{ h.history_change_reason }}</div>
+          <div class="text-muted mb-2 timeline-header">{{ h.history_user }} <span class="mx-1">&bullet;</span> {{ h.history_date }}</div>
+        </li>
+      {% endfor %} 
+    </ul>
+  </section>
+
+<!-- Section: Timeline -->
+
+<!-- Section: Timeline -->

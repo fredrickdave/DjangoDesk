@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     "django_htmx",
     "django_filters",
     "widget_tweaks",
+    "simple_history",
 ]
 
 # https://docs.djangoproject.com/en/4.2/ref/forms/renderers/#templatessetting
@@ -78,6 +79,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django_htmx.middleware.HtmxMiddleware",
+    "simple_history.middleware.HistoryRequestMiddleware",
 ]
 
 ROOT_URLCONF = "ticket_management.urls"

@@ -5,6 +5,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
+from simple_history.models import HistoricalRecords
 
 from ..users.models import User
 
@@ -83,6 +84,7 @@ class Ticket(BaseModel):
         User, null=True, blank=True, on_delete=models.SET_NULL, related_name="created_tickets"
     )
     completed_at = models.DateTimeField(null=True, blank=True)
+    history = HistoricalRecords()
 
     def __str__(self) -> str:
         return f"{self.ticket_number} - {self.summary}"
@@ -99,28 +101,40 @@ class Ticket(BaseModel):
         "Set the ticket status to Open. If an agent was already assigned to ticket, status will be Assigned instead."
         if self.assigned_agent:
             self.status = 2
+            self._change_reason = f"Ticket has been reopened and reassigned to {self.assigned_agent}."
         else:
             self.status = 1
+            self._change_reason = "Ticket has been set to Open status.}."
 
     def set_status_assigned(self):
         "Set the ticket status to Assigned."
         self.status = 2
+        self._change_reason = "Ticket has been assigned."
 
     def set_status_in_progress(self):
         "Set the ticket status to In Progress."
+        if self.status == 4:
+            self._change_reason = "Work on the ticket has resumed."
+        elif self.status == 2:
+            self._change_reason = "Work on the ticket has started."
+        else:
+            self._change_reason = "Ticket is now In Progress."
         self.status = 3
 
     def set_status_on_hold(self):
         "Set the ticket status to On Hold."
         self.status = 4
+        self._change_reason = "Ticket has been put on hold status."
 
     def set_status_resolved(self):
         "Set the ticket status to Resolved."
         self.status = 5
+        self._change_reason = "Ticket has been resolved."
 
     def set_status_close(self):
         "Set the ticket status to Closed."
         self.status = 6
+        self._change_reason = "Ticket has been closed."
 
 
 class TicketComment(BaseModel):
