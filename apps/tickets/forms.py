@@ -30,9 +30,6 @@ class TicketCommentForm(ModelForm):
         model = TicketComment
         fields = ["comment"]
 
-        widgets = {"comment": forms.Textarea(attrs={"class": "form-control ticket-comment"})}
-        labels = {"comment": "Add notes:"}
-
 
 # https://docs.djangoproject.com/en/5.0/topics/http/file-uploads/#uploading-multiple-files
 class MultipleFileInput(forms.ClearableFileInput):
