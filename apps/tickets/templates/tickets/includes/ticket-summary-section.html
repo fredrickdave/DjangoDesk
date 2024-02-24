@@ -1,8 +1,14 @@
 <h3 class="pt-3 pe-5">Summary: {{ selected_ticket.summary }}</h3>
 
 <!-- Ticket Action Buttons -->
-{% include "tickets/includes/agent-action-buttons.html" %}
-{% include "tickets/includes/user-action-buttons.html" %}
+{% if request.user.role != 3 %}
+  {% include "tickets/includes/agent-action-buttons.html" %}
+{% endif %}
+
+{% if request.user == selected_ticket.created_by %}
+  {% include "tickets/includes/user-action-buttons.html" %}
+{% endif %}
+
 <hr class="mt-3 d-none d-lg-block">
 
 <!-- Attachment List -->

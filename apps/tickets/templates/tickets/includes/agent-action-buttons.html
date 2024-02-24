@@ -1,67 +1,66 @@
-{% if request.user.role != 3 %}
 
-  {% if not selected_ticket.assigned_agent and selected_ticket.status != 4 and selected_ticket.status != 6 %}
+<!-- Enable Accept button if authenticated user is not ticket author, there's no assigned agent yet, and ticket status is Open -->
+{% if request.user != selected_ticket.created_by and not selected_ticket.assigned_agent and selected_ticket.status == 1 %}
 
-    <a href="#" class="btn btn-success btn-sm mt-1" data-bs-toggle="modal" data-bs-target="#AcceptTicketModal">
-      <i class="bi bi-check-circle"></i> Accept
+  <a href="#" class="btn btn-success btn-sm mt-1" data-bs-toggle="modal" data-bs-target="#AcceptTicketModal">
+    <i class="bi bi-check-circle"></i> Accept
+  </a>
+
+  <!-- Accept Ticket Modal -->
+  {% include "tickets/includes/modals/accept-ticket-modal.html" %}
+
+{% elif request.user == selected_ticket.assigned_agent %}
+
+  <!-- Enable Resolve/Close buttons if ticket status is In-Progress -->
+  {% if selected_ticket.status == 3 %}
+    <a href="#" class="btn btn-success btn-sm mt-1" data-bs-toggle="modal" data-bs-target="#ResolveTicketModal">
+      <i class="bi bi-check-circle"></i> Resolve
+    </a>
+    <a href="#" class="btn btn-danger btn-sm mt-1" data-bs-toggle="modal" data-bs-target="#CloseTicketModal">
+      <i class="bi bi-x-circle"></i> Close
     </a>
 
-    <!-- Accept Ticket Modal -->
-    {% include "tickets/includes/modals/accept-ticket-modal.html" %}
+    <a href="#" class="btn btn-secondary btn-sm mt-1"><i class="bi bi-arrow-right-circle"></i> Transfer</a>
+  {% endif %}
 
-  {% else %}
-
-    {% comment %} Enable Resolve/Close buttons if ticket status is not Assigned, Closed, or Resolved {% endcomment %}
-    {% if selected_ticket.status != 2 and selected_ticket.status != 5 and selected_ticket.status != 6 %}
-      <a href="#" class="btn btn-success btn-sm mt-1" data-bs-toggle="modal" data-bs-target="#ResolveTicketModal">
-        <i class="bi bi-check-circle"></i> Resolve
-      </a>
-      <a href="#" class="btn btn-danger btn-sm mt-1" data-bs-toggle="modal" data-bs-target="#CloseTicketModal">
-        <i class="bi bi-x-circle"></i> Close
-      </a>
-    {% endif %}
-
-    {% if selected_ticket.status == 2 %}
-      <a href="#" class="btn btn-success btn-sm mt-1" data-bs-toggle="modal" data-bs-target="#StartTicketModal">
-        <i class="bi bi-play-circle"></i> Start Work
-      </a>
-    {% elif selected_ticket.status != 4 and selected_ticket.status != 5 and selected_ticket.status != 6 %}
-      <a href="#" class="btn btn-warning btn-sm mt-1" data-bs-toggle="modal" data-bs-target="#OnHoldTicketModal">
-        <i class="bi bi-pause-circle"></i> On Hold
-      </a>
-    {% elif selected_ticket.status == 4 %}
-      <a href="#" class="btn btn-warning btn-sm mt-1" data-bs-toggle="modal" data-bs-target="#ResumeTicketModal">
-        <i class="bi bi-play-circle"></i> Resume
-      </a>
-    {% endif %}
+  {% if selected_ticket.status == 2 %}
+    <a href="#" class="btn btn-success btn-sm mt-1" data-bs-toggle="modal" data-bs-target="#StartTicketModal">
+      <i class="bi bi-play-circle"></i> Start Work
+    </a>
+  {% elif selected_ticket.status != 4 and selected_ticket.status != 5 and selected_ticket.status != 6 %}
+    <a href="#" class="btn btn-warning btn-sm mt-1" data-bs-toggle="modal" data-bs-target="#OnHoldTicketModal">
+      <i class="bi bi-pause-circle"></i> On Hold
+    </a>
+  {% elif selected_ticket.status == 4 %}
+    <a href="#" class="btn btn-warning btn-sm mt-1" data-bs-toggle="modal" data-bs-target="#ResumeTicketModal">
+      <i class="bi bi-play-circle"></i> Resume
+    </a>
+  {% endif %}
 
 
-    
-    {% if selected_ticket.status != 1 and selected_ticket.status != 2 and selected_ticket.status != 3 and selected_ticket.status != 4 %}
+  <!-- Enable reopen button if ticket status is either Closed or Resolved -->
+  {% if selected_ticket.status == 5 or selected_ticket.status == 6 %}
     <a href="#" class="btn btn-danger btn-sm mt-1" data-bs-toggle="modal" data-bs-target="#ReopenTicketModal">
       <i class="bi bi-arrow-counterclockwise"></i> Reopen
     </a>
-    {% endif %}
-    
-    <a href="#" class="btn btn-secondary btn-sm mt-1"><i class="bi bi-arrow-right-circle"></i> Transfer</a>
-
-    <!-- Start Ticket Modal -->
-    {% include "tickets/includes/modals/start-ticket-modal.html" %}
-
-    <!-- Close Ticket Modal -->
-    {% include "tickets/includes/modals/close-ticket-modal.html" %}
-
-    <!-- Resolve Ticket Modal -->
-    {% include "tickets/includes/modals/resolve-ticket-modal.html" %}
-
-    <!-- Reopen Ticket Modal -->
-    {% include "tickets/includes/modals/reopen-ticket-modal.html" %}
-
-    <!-- On Hold Ticket Modal -->
-    {% include "tickets/includes/modals/on-hold-ticket-modal.html" %}
-
-    <!-- Resume Ticket Modal -->
-    {% include "tickets/includes/modals/resume-ticket-modal.html" %}
   {% endif %}
+  
+  <!-- Start Ticket Modal -->
+  {% include "tickets/includes/modals/start-ticket-modal.html" %}
 
+  <!-- Close Ticket Modal -->
+  {% include "tickets/includes/modals/close-ticket-modal.html" %}
+
+  <!-- Resolve Ticket Modal -->
+  {% include "tickets/includes/modals/resolve-ticket-modal.html" %}
+
+  <!-- Reopen Ticket Modal -->
+  {% include "tickets/includes/modals/reopen-ticket-modal.html" %}
+
+  <!-- On Hold Ticket Modal -->
+  {% include "tickets/includes/modals/on-hold-ticket-modal.html" %}
+
+  <!-- Resume Ticket Modal -->
+  {% include "tickets/includes/modals/resume-ticket-modal.html" %}
 {% endif %}
+

@@ -1,16 +1,32 @@
-{% if request.user == selected_ticket.created_by %}
 
+
+<!-- Enable if ticket status is Closed or Resolved -->
+{% if selected_ticket.status == 5 or selected_ticket.status == 6 %}
+<a href="#" class="btn btn-danger btn-sm mt-1" data-bs-toggle="modal" data-bs-target="#ReopenTicketModal">
+  <i class="bi bi-arrow-counterclockwise"></i> Reopen
+</a>
+{% endif %}
+
+<!-- Enable if ticket status is not On Hold, Closed, or Resolved -->
+{% if selected_ticket.status != 4 and selected_ticket.status != 5 and selected_ticket.status != 6 %}
+  <a href="#" class="btn btn-danger btn-sm mt-1" data-bs-toggle="modal" data-bs-target="#CloseTicketModal">
+    <i class="bi bi-x-circle"></i> Close
+  </a>
   <a href="#" class="btn btn-primary btn-sm mt-1" data-bs-toggle="modal" data-bs-target="#AddAttachmentModal">
     <i class="bi bi-paperclip"></i> Attach
   </a>
-
-  <!-- Upload Attachment Modal -->
-  {% include "tickets/includes/modals/upload-attachment-modal.html" %}
-
-
   <a href="#" class="btn btn-primary btn-sm mt-1" data-bs-toggle="modal" data-bs-target="#EditTicketModal"><i class="bi bi-pencil-square"></i> Edit</a>
 
-  <!-- Edit Ticket Modal -->
-  {% include "tickets/includes/modals/edit-ticket-modal.html" %}
-
 {% endif %}
+
+<!-- Upload Attachment Modal -->
+{% include "tickets/includes/modals/upload-attachment-modal.html" %}
+
+<!-- Edit Ticket Modal -->
+{% include "tickets/includes/modals/edit-ticket-modal.html" %}
+
+<!-- Close Ticket Modal -->
+{% include "tickets/includes/modals/close-ticket-modal.html" %}
+
+<!-- Reopen Ticket Modal -->
+{% include "tickets/includes/modals/reopen-ticket-modal.html" %}
