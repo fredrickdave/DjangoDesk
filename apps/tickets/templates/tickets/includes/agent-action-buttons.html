@@ -1,4 +1,3 @@
-
 <!-- Enable Accept button if authenticated user is not ticket author, there's no assigned agent yet, and ticket status is Open -->
 {% if request.user != selected_ticket.created_by and not selected_ticket.assigned_agent and selected_ticket.status == 1 %}
 

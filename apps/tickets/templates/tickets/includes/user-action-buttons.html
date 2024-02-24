@@ -1,5 +1,3 @@
-
-
 <!-- Enable if ticket status is Closed or Resolved -->
 {% if selected_ticket.status == 5 or selected_ticket.status == 6 %}
 <a href="#" class="btn btn-danger btn-sm mt-1" data-bs-toggle="modal" data-bs-target="#ReopenTicketModal">
@@ -7,8 +5,8 @@
 </a>
 {% endif %}
 
-<!-- Enable if ticket status is not On Hold, Closed, or Resolved -->
-{% if selected_ticket.status != 4 and selected_ticket.status != 5 and selected_ticket.status != 6 %}
+<!-- Enable Close ticket and Attach buttons if ticket status is not Closed or Resolved -->
+{% if selected_ticket.status != 5 and selected_ticket.status != 6 %}
   <a href="#" class="btn btn-danger btn-sm mt-1" data-bs-toggle="modal" data-bs-target="#CloseTicketModal">
     <i class="bi bi-x-circle"></i> Close
   </a>
