@@ -93,23 +93,29 @@ class Ticket(BaseModel):
         """This is used by django_tables2 to generate a link to the ticket detail page."""
         return reverse("ticket-details", kwargs={"ticket_number": self.ticket_number})
 
-    def assign_agent(self, user):
-        if user.role == 1 or user.role == 2:
+    def assign_agent(self, user: User):
+        """This method accepts a User object, verifies it's role is either an admin or support agent and not the ticket
+        author, then assigns it to the ticket's assigned agent field.
+
+        Args:
+            user (User): instance of user object that will be assigned to the ticket
+        """
+        if user.role == 1 or user.role == 2 and user != self.created_by:
             self.assigned_agent = user
 
     def set_status_open(self):
-        "Set the ticket status to Open. If an agent was already assigned to ticket, status will be Assigned instead."
+        "Sets the ticket status to Open. If an agent was already assigned to ticket, status will be Assigned instead."
         if self.assigned_agent:
             self.status = 2
             self._change_reason = f"Ticket has been reopened and reassigned to {self.assigned_agent}."
         else:
             self.status = 1
-            self._change_reason = "Ticket has been set to Open status.}."
+            self._change_reason = "Ticket has been reopened."
 
     def set_status_assigned(self):
         "Set the ticket status to Assigned."
         self.status = 2
-        self._change_reason = "Ticket has been assigned."
+        self._change_reason = f"Ticket has been assigned to {self.assigned_agent}."
 
     def set_status_in_progress(self):
         "Set the ticket status to In Progress."

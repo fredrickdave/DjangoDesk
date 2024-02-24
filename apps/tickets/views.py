@@ -156,46 +156,77 @@ def delete_attachment(request, ticket_number, pk):
 @login_required
 def assign_ticket(request, ticket_number):
     selected_ticket = get_object_or_404(Ticket, ticket_number=ticket_number)
-    if request.user.role == 1 or request.user.role == 2:
+    if selected_ticket.created_by == request.user:
+        messages.error(
+            request=request,
+            message="You're not allowed to accept a ticket you've created.",
+        )
+    elif ("accept" in request.POST and not selected_ticket.assigned_agent) and (
+        request.user.role == 1 or request.user.role == 2
+    ):
         selected_ticket.assign_agent(user=request.user)
         selected_ticket.set_status_assigned()
         selected_ticket.save()
-        messages.success(request=request, message="You've successfully accepted this ticket.")
+        messages.success(
+            request=request,
+            message="You've successfully accepted this ticket. Click on Start Work to start the ticket progress.",
+        )
     else:
-        messages.error(request=request, message="You are not authorized to accept this ticket.")
+        messages.error(
+            request=request,
+            message="You are either not authorized to accept this ticket, or this ticket is already assigned.",
+        )
     return redirect(to="ticket-details", ticket_number=ticket_number)
 
 
 @login_required
 def update_ticket_status(request, ticket_number):
     selected_ticket = get_object_or_404(Ticket, ticket_number=ticket_number)
-    if request.user.role == 1 or request.user.role == 2:
-        if "start" in request.POST or "resume" in request.POST:
-            selected_ticket.set_status_in_progress()
+    actions = {
+        "start": {
+            "allowed_users": [1, 2],
+            "update_status": selected_ticket.set_status_in_progress,
+            "message": "This ticket is now In Progress.",
+        },
+        "close": {
+            "allowed_users": [1, 2, 3],
+            "update_status": selected_ticket.set_status_close,
+            "message": "This ticket is now Closed.",
+        },
+        "resolve": {
+            "allowed_users": [1, 2],
+            "update_status": selected_ticket.set_status_resolved,
+            "message": "This ticket is now resolved.",
+        },
+        "hold": {
+            "allowed_users": [1, 2],
+            "update_status": selected_ticket.set_status_on_hold,
+            "message": "This ticket is now on hold status.",
+        },
+        "resume": {
+            "allowed_users": [1, 2],
+            "update_status": selected_ticket.set_status_in_progress,
+            "message": "This ticket is now In Progress.",
+        },
+        "reopen": {
+            "allowed_users": [1, 2, 3],
+            "update_status": selected_ticket.set_status_open,
+            "message": (
+                f"Ticket has been reopened and reassigned to {selected_ticket.assigned_agent}"
+                if selected_ticket.assigned_agent
+                else "This ticket has been opened."
+            ),
+        },
+    }
+
+    for key in actions:
+        if (key in request.POST and request.user.role in actions[key]["allowed_users"]) and (
+            request.user == selected_ticket.assigned_agent or request.user == selected_ticket.created_by
+        ):
+            actions[key]["update_status"]()
             selected_ticket.save()
-            messages.success(request=request, message="This ticket is now In Progress.")
-        elif "close" in request.POST:
-            selected_ticket.set_status_close()
-            selected_ticket.save()
-            messages.success(request=request, message="This ticket is now closed.")
-        elif "resolve" in request.POST:
-            selected_ticket.set_status_resolved()
-            selected_ticket.save()
-            messages.success(request=request, message="This ticket is now resolved.")
-        elif "hold" in request.POST:
-            selected_ticket.set_status_on_hold()
-            selected_ticket.save()
-            messages.success(request=request, message="This ticket is now on hold status.")
-        elif "reopen" in request.POST:
-            selected_ticket.set_status_open()
-            if selected_ticket.assigned_agent:
-                messages.success(
-                    request=request,
-                    message=f"Ticket has been reopened and reassigned to {selected_ticket.assigned_agent}.",
-                )
-            else:
-                messages.success(request=request, message="This ticket has been opened.")
-            selected_ticket.save()
-    else:
-        messages.error(request=request, message="You are not authorized to accept this ticket.")
+            messages.success(request=request, message=actions[key]["message"])
+            return redirect(to="ticket-details", ticket_number=ticket_number)
+
+    messages.error(request=request, message="You are not authorized to perform this action.")
     return redirect(to="ticket-details", ticket_number=ticket_number)
