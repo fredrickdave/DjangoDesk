@@ -50,12 +50,13 @@ def ticket_details(request, ticket_number):
     attachment_form = TicketAttachmentForm(new_ticket=False)
     ticket_form = TicketForm(instance=selected_ticket)
     if request.method == "POST":
-        # Only ticket author is allowed to make modifications
-        if request.user != selected_ticket.created_by:
-            messages.error(request=request, message="You are not authorized to perform this action.")
-            return redirect(to="ticket-details", ticket_number=ticket_number)
 
-        if "add-comment" in request.POST:
+        # Only ticket author and assigned agent are allowed to comment on ticket
+        if (
+            "add-comment" in request.POST
+            and request.user == selected_ticket.created_by
+            or request.user == selected_ticket.assigned_agent
+        ):
             comment_form = TicketCommentForm(data=request.POST)
             if comment_form.is_valid():
                 comment = comment_form.save(commit=False)
@@ -64,7 +65,10 @@ def ticket_details(request, ticket_number):
                 comment.save()
                 messages.success(request=request, message="Your comment was posted successfully.")
                 return redirect(to="ticket-details", ticket_number=ticket_number)
-        elif "add-attachment" in request.POST:
+            else:
+                messages.error(request=request, message="You did not enter any comment.")
+        # Only ticket author is allowed to edit ticket and add attachment
+        elif "add-attachment" in request.POST and request.user != selected_ticket.created_by:
             attachment_form = TicketAttachmentForm(
                 data=request.POST, files=request.FILES, file_count=ticket_file_count, new_ticket=False
             )
@@ -77,7 +81,7 @@ def ticket_details(request, ticket_number):
                 # https://docs.djangoproject.com/en/5.0/ref/forms/api/#django.forms.ErrorList.as_text
                 error = attachment_form.errors.get("attachment").as_text().replace("*", "")
                 messages.error(request=request, message=error)
-        elif "edit-ticket" in request.POST:
+        elif "edit-ticket" in request.POST and request.user != selected_ticket.created_by:
             ticket_form = TicketForm(instance=selected_ticket, data=request.POST)
             if ticket_form.is_valid():
                 selected_ticket._change_reason = "Ticket details have been updated."
@@ -85,8 +89,11 @@ def ticket_details(request, ticket_number):
                 messages.success(request=request, message="Change saved successfully.")
             else:
                 messages.error(
-                    request=request, message="Ticket Update failed. Please make sure to answer all required fields."
+                    request=request,
+                    message="Failed to update ticket details. Please make sure to answer all required fields.",
                 )
+        else:
+            messages.error(request=request, message="You are not authorized to perform this action.")
 
     context = {
         "selected_ticket": selected_ticket,
@@ -129,7 +136,8 @@ def create_ticket(request):
                 request=request,
                 message=(
                     f"Your ticket {ticket.ticket_number} has been created. Our support team will get back to you as"
-                    " soon as possible."
+                    " soon as possible, we appreciate your patience. If you have any additional information or"
+                    " questions, feel free to add them to the ticket. "
                 ),
             )
             return redirect(to="ticket-details", ticket_number=ticket.ticket_number)

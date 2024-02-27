@@ -1,6 +1,9 @@
 {% load static %}
 
-{% include "tickets/includes/add-comment-form.html" %}
+<hr class="">
+{% if request.user == selected_ticket.created_by or request.user == selected_ticket.assigned_agent %}
+  {% include "tickets/includes/add-comment-form.html" %}
+{% endif %}
 
 <!-- All Comment Section -->
 <h5 class="mt-5">All Comments</h5>
