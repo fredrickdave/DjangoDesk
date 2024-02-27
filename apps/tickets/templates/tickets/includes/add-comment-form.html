@@ -1,0 +1,18 @@
+{% load widget_tweaks %}
+
+ <!-- Add Comment Form -->
+  <hr class="">
+  <h5 class="pt-3 pe-5">Add Comment</h5>
+  <form class="row g-3" method="POST" novalidate>
+      {% csrf_token %}
+      {% for form_field in comment_form %}
+        {% if selected_ticket.status == 5 or selected_ticket.status == 6 %}
+          {% render_field form_field class="form-control ticket-comment" placeholder="Adding comments is disabled. Ticket is already resolved or closed." disabled="disabled" %}
+          {{ form_field.errors }}
+        {% else %}
+          {% render_field form_field class="form-control ticket-comment" placeholder="Type your comment here" %}
+        {% endif %}
+      {% endfor %}
+      <button class="btn btn-primary" type="submit" name="add-comment" {% if selected_ticket.status == 5 or selected_ticket.status == 6 %}disabled{% endif %}>Submit</button>
+  </form>
+  <!-- End Comment Form -->
