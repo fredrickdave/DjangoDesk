@@ -4,8 +4,8 @@
   <section class="py-5">
     <ul class="timeline">
       {% for h in selected_ticket.history.all %}
-        <li class="timeline-item mb-3">
-          <div class=""> {{ h.history_change_reason }}</div>
+        <li class="timeline-item mb-3 {% if h.status == 1 %}timeline-item-open{% elif h.status == 2 or h.status == 3 or h.status == 4 %}timeline-item-progress{% elif h.status == 5 or h.status == 6 %}timeline-item-closed{% endif %}">
+          <div class="">{{ h.history_change_reason }}</div>
           <div class="text-muted mb-2 timeline-header">{{ h.history_user }} <span class="mx-1">&bullet;</span> {{ h.history_date }}</div>
         </li>
       {% endfor %} 

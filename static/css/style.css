@@ -1423,3 +1423,15 @@ h6 {
 .timeline-header {
   font-size: 14px;
 }
+
+.timeline .timeline-item-open:after {
+  background-color: #d9534f;
+}
+
+.timeline .timeline-item-progress:after {
+  background-color: #f0ad4e;
+}
+
+.timeline .timeline-item-closed:after {
+  background-color: #5cb85c;
+}
