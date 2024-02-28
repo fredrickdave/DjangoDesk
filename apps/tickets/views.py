@@ -200,16 +200,19 @@ def update_ticket_status(request, ticket_number):
             "allowed_users": [1, 2, 3],
             "update_status": selected_ticket.set_status_close,
             "message": "This ticket is now Closed.",
+            "comment": "Closed the ticket",
         },
         "resolve": {
             "allowed_users": [1, 2],
             "update_status": selected_ticket.set_status_resolved,
             "message": "This ticket is now resolved.",
+            "comment": "Resolved the ticket",
         },
         "hold": {
             "allowed_users": [1, 2],
             "update_status": selected_ticket.set_status_on_hold,
             "message": "This ticket is now on hold status.",
+            "comment": "Placed the ticket on hold",
         },
         "resume": {
             "allowed_users": [1, 2],
@@ -224,6 +227,7 @@ def update_ticket_status(request, ticket_number):
                 if selected_ticket.assigned_agent
                 else "This ticket has been opened."
             ),
+            "comment": "Reopened the ticket",
         },
     }
 
@@ -231,9 +235,23 @@ def update_ticket_status(request, ticket_number):
         if (key in request.POST and request.user.role in actions[key]["allowed_users"]) and (
             request.user == selected_ticket.assigned_agent or request.user == selected_ticket.created_by
         ):
-            actions[key]["update_status"]()
-            selected_ticket.save()
-            messages.success(request=request, message=actions[key]["message"])
+            comment_form = TicketCommentForm(data=request.POST)
+            if key == "start" or key == "resume":
+                actions[key]["update_status"]()
+                selected_ticket.save()
+                messages.success(request=request, message=actions[key]["message"])
+            elif comment_form.is_valid():
+                actions[key]["update_status"]()
+                selected_ticket.save()
+
+                comment = comment_form.save(commit=False)
+                comment.comment = actions[key]["comment"] + " - " + comment.comment
+                comment.created_by = request.user
+                comment.ticket = selected_ticket
+                comment.save()
+                messages.success(request=request, message=actions[key]["message"])
+            else:
+                messages.error(request=request, message="Please enter the reason for updating the ticket status.")
             return redirect(to="ticket-details", ticket_number=ticket_number)
 
     messages.error(request=request, message="You are not authorized to perform this action.")

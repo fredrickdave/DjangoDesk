@@ -1,4 +1,6 @@
 
+{% load widget_tweaks %}
+
 <div class="modal fade" id="ResolveTicketModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
       <div class="modal-content">
@@ -14,6 +16,13 @@
                   <div class="col-12">
                     Are you sure you want to resolve this ticket?
                   </div>
+                  <div class="col-12 mt-3">
+                    {% for form_field in comment_form %}
+                      {% render_field form_field class="form-control ticket-comment" placeholder="Enter a brief description of the resolution." %}
+                      {{ form_field.errors }}
+                    {% endfor %}
+                  </div>
+
               </div>
 
               <div class="modal-footer">

@@ -1,4 +1,6 @@
 
+{% load widget_tweaks %}
+
 <div class="modal fade" id="ReopenTicketModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
       <div class="modal-content">
@@ -13,6 +15,12 @@
               <div class="modal-body mx-2">
                   <div class="col-12">
                     Are you sure you want to reopen this ticket?
+                  </div>
+                  <div class="col-12 mt-3">
+                    {% for form_field in comment_form %}
+                      {% render_field form_field class="form-control ticket-comment" placeholder="Enter the reason for reopening this ticket" %}
+                      {{ form_field.errors }}
+                    {% endfor %}
                   </div>
               </div>
 
