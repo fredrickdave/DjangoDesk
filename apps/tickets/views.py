@@ -68,7 +68,7 @@ def ticket_details(request, ticket_number):
             else:
                 messages.error(request=request, message="You did not enter any comment.")
         # Only ticket author is allowed to edit ticket and add attachment
-        elif "add-attachment" in request.POST and request.user != selected_ticket.created_by:
+        elif "add-attachment" in request.POST and request.user == selected_ticket.created_by:
             attachment_form = TicketAttachmentForm(
                 data=request.POST, files=request.FILES, file_count=ticket_file_count, new_ticket=False
             )
@@ -81,7 +81,7 @@ def ticket_details(request, ticket_number):
                 # https://docs.djangoproject.com/en/5.0/ref/forms/api/#django.forms.ErrorList.as_text
                 error = attachment_form.errors.get("attachment").as_text().replace("*", "")
                 messages.error(request=request, message=error)
-        elif "edit-ticket" in request.POST and request.user != selected_ticket.created_by:
+        elif "edit-ticket" in request.POST and request.user == selected_ticket.created_by:
             ticket_form = TicketForm(instance=selected_ticket, data=request.POST)
             if ticket_form.is_valid():
                 selected_ticket._change_reason = "Ticket details have been updated."
