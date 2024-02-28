@@ -176,9 +176,7 @@ def validate_file_type(value):
         for file in value:
             file_mime_type = magic.from_buffer(file.read(2048), mime=True)
             ext = os.path.splitext(file.name)[1]
-            print("MIME", file_mime_type)
-            print("EXT", ext)
-            if file_mime_type in blacklisted_mime_types or ext in blacklisted_file_extensions:
+            if file_mime_type in blacklisted_mime_types or ext.lower in blacklisted_file_extensions:
                 raise ValidationError("Unsupported file type.")
     else:
         file_mime_type = magic.from_buffer(value.read(2048), mime=True)
