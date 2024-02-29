@@ -81,6 +81,10 @@
     <!-- Template Main JS File -->
     <script src="{% static "js/main.js" %}" defer></script>
     <script src="{% static "js/htmx.min.js" %}" defer></script>
-
+    <script>
+      // Timezone settings
+      const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone; // e.g. "America/New_York"
+      document.cookie = "django_timezone=" + timezone;
+    </script>
   </body>
 </html>
