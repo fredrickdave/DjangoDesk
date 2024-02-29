@@ -1,5 +1,5 @@
 """
-ASGI config for ticket_management project.
+ASGI config for djangodesk project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ticket_management.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'djangodesk.settings')
 
 application = get_asgi_application()
