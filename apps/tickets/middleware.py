@@ -10,13 +10,12 @@ class TimezoneMiddleware:
     def __call__(self, request):
         try:
             # get django_timezone from cookie
-            tzname = request.COOKIES["d"]
+            tzname = request.COOKIES.get("django_timezone")
             if tzname:
                 timezone.activate(zoneinfo.ZoneInfo(tzname))
             else:
                 timezone.deactivate()
         except Exception as e:
-            print("E", e)
             timezone.deactivate()
 
         return self.get_response(request)
