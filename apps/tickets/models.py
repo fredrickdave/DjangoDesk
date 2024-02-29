@@ -205,8 +205,3 @@ class TicketAttachment(BaseModel):
         super(TicketAttachment, self).delete(*args, **kwargs)
         self.ticket._change_reason = "File attachment was deleted from the ticket."
         self.ticket.save()
-
-    def save(self, *args, **kwargs):
-        super(TicketAttachment, self).save(*args, **kwargs)
-        self.ticket._change_reason = "File attachment was added to the ticket."
-        self.ticket.save()

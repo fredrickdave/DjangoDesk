@@ -114,8 +114,13 @@ def create_attachment(files, ticket):
         ticket (_type_): _description_
     """
 
+    obj = []
     for file in files:
-        TicketAttachment.objects.create(attachment=file, ticket=ticket)
+        obj.append(TicketAttachment(attachment=file, ticket=ticket))
+
+    TicketAttachment.objects.bulk_create(obj)
+    ticket._change_reason = "File attachment was added to the ticket."
+    ticket.save()
 
 
 @login_required
