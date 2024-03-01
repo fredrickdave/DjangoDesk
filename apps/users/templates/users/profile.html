@@ -68,6 +68,16 @@
                 Change Password
               </button>
             </li>
+
+            <li class="nav-item">
+              <button
+                class="nav-link"
+                data-bs-toggle="tab"
+                data-bs-target="#profile-settings"
+              >
+                Settings
+              </button>
+            </li>
           </ul>
           <div class="tab-content pt-2">
             <!-- Profile Overview Form -->
@@ -81,6 +91,9 @@
 
             <!-- Change Paswword Form -->
             {% include "users/includes/change-password-form.html" %}
+
+            <!-- Profile Settings Form -->
+            {% include "users/includes/settings.html" %}
           </div>
           <!-- End Bordered Tabs -->
         </div>

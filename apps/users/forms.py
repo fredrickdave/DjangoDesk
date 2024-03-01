@@ -108,7 +108,17 @@ class CustomClearableFileInput(forms.ClearableFileInput):
 class EditProfileForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ["avatar", "first_name", "last_name", "about", "job", "department", "company", "phone", "linkedin"]
+        fields = [
+            "avatar",
+            "first_name",
+            "last_name",
+            "about",
+            "job",
+            "department",
+            "company",
+            "phone",
+            "linkedin",
+        ]
 
         widgets = {
             "avatar": CustomClearableFileInput(attrs={"class": "form-control"}),
@@ -121,3 +131,9 @@ class EditProfileForm(forms.ModelForm):
             "phone": forms.TextInput(attrs={"class": "form-control"}),
             "linkedin": forms.URLInput(attrs={"class": "form-control"}),
         }
+
+
+class TimeZoneForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ["timezone"]

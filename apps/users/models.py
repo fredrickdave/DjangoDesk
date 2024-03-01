@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 from django.utils import timezone
 from django_resized import ResizedImageField
+from timezone_field import TimeZoneField
 
 
 class BaseModel(models.Model):
@@ -71,6 +72,7 @@ class User(AbstractUser):
     company = models.CharField(max_length=50, blank=True)
     phone = models.CharField(max_length=50, blank=True)
     linkedin = models.URLField(max_length=500, blank=True)
+    timezone = TimeZoneField(use_pytz=False, choices_display="WITH_GMT_OFFSET", null=True, blank=True)
 
     # https://docs.djangoproject.com/en/4.2/topics/auth/customizing/#django.contrib.auth.models.CustomUser
     USERNAME_FIELD = "email"

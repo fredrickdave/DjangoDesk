@@ -84,7 +84,7 @@ class Ticket(BaseModel):
         User, null=True, blank=True, on_delete=models.SET_NULL, related_name="created_tickets"
     )
     completed_at = models.DateTimeField(null=True, blank=True)
-    history = HistoricalRecords()
+    history = HistoricalRecords(cascade_delete_history=True)
 
     def __str__(self) -> str:
         return f"{self.ticket_number} - {self.summary}"

@@ -101,6 +101,7 @@ def ticket_details(request, ticket_number):
         "attachment_form": attachment_form,
         "ticket_form": ticket_form,
         "ticket_comments": ticket_comments,
+        "page": "ticket",
     }
     return render(request=request, template_name="tickets/ticket-detail.html", context=context)
 
@@ -150,7 +151,11 @@ def create_ticket(request):
         ticket_form = TicketForm()
         attachment_form = TicketAttachmentForm(file_count=0, new_ticket=True)
 
-    context = {"ticket_form": ticket_form, "attachment_form": attachment_form}
+    context = {
+        "ticket_form": ticket_form,
+        "attachment_form": attachment_form,
+        "page": "new-ticket",
+    }
     return render(request=request, template_name="tickets/create-ticket.html", context=context)
 
 

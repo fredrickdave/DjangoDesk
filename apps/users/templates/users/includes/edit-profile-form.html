@@ -19,13 +19,13 @@
 
         {% for form_field in edit_profile_form %}
 
-        {% if form_field.label != "Avatar" %}
-            <div class="row mb-3">
-                <label for="{{ form_field.auto_id }}" class="col-md-4 col-lg-3 col-form-label">{{form_field.label}}</label>
-                <div class="col-md-8 col-lg-9">{{ form_field }}</div>
-                {{ form_field.errors }}
-            </div>
-        {% endif %}
+          {% if form_field.label != "Avatar" and form_field.label != "Timezone" %}
+              <div class="row mb-3">
+                  <label for="{{ form_field.auto_id }}" class="col-md-4 col-lg-3 col-form-label">{{form_field.label}}</label>
+                  <div class="col-md-8 col-lg-9">{{ form_field }}</div>
+                  {{ form_field.errors }}
+              </div>
+          {% endif %}
 
         {% endfor %}
 

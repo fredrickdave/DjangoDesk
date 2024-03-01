@@ -5,7 +5,7 @@ from django.shortcuts import redirect, render
 from django.utils.encoding import iri_to_uri
 from django.utils.http import url_has_allowed_host_and_scheme
 
-from .forms import ChangeEmailForm, ChangePasswordForm, EditProfileForm, LoginForm, RegisterForm
+from .forms import ChangeEmailForm, ChangePasswordForm, EditProfileForm, LoginForm, RegisterForm, TimeZoneForm
 
 
 def sign_in(request):
@@ -71,6 +71,7 @@ def profile(request):
     edit_profile_form = EditProfileForm(instance=request.user)
     change_password_form = ChangePasswordForm(user=request.user)
     change_email_form = ChangeEmailForm(instance=request.user, request=request)
+    change_timezone_form = TimeZoneForm(instance=request.user)
 
     if request.method == "POST":
         if "update-profile" in request.POST:
@@ -94,11 +95,17 @@ def profile(request):
                 messages.success(request=request, message="You have successfully changed your email.")
             else:
                 messages.error(request=request, message="Email change failed. Please try again.")
+        elif "update-settings" in request.POST:
+            change_timezone_form = TimeZoneForm(data=request.POST, files=request.FILES, instance=request.user)
+            if change_timezone_form.is_valid():
+                change_timezone_form.save()
+                messages.success(request=request, message="You have successfully updated your Time Zone.")
 
     context = {
         "edit_profile_form": edit_profile_form,
         "change_email_form": change_email_form,
         "change_password_form": change_password_form,
+        "change_timezone_form": change_timezone_form,
         "page": "profile",
     }
     return render(request=request, template_name="users/profile.html", context=context)
