@@ -21,7 +21,8 @@ Pillow==10.1.0
 platformdirs==4.2.0
 psycopg2-binary==2.9.9
 python-dotenv==1.0.0
-python-magic-bin==0.4.14
+python-magic==0.4.27
+sudo apt-get install libmagic1
 sqlparse==0.4.4
 typing_extensions==4.10.0
 tzdata==2023.3
