@@ -107,12 +107,12 @@ def ticket_details(request, ticket_number):
 
 
 def create_attachment(files, ticket):
-    """This function accepts a list of Files object
+    """This function accepts a list of Files object and creates attachment
+    records in the database
 
     Args:
-        request (_type_): _description_
-        files (list): _description_
-        ticket (_type_): _description_
+        files (list): List of file objects
+        ticket (_type_): Ticket object that will be related to the attachment
     """
 
     obj = []
@@ -137,7 +137,8 @@ def create_ticket(request):
             ticket.save()
 
             files = attachment_form.cleaned_data["attachment"]
-            create_attachment(files=files, ticket=ticket)
+            if files:
+                create_attachment(files=files, ticket=ticket)
             messages.success(
                 request=request,
                 message=(
