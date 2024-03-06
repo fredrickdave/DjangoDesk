@@ -16,7 +16,7 @@ class AllTickets(LoginRequiredMixin, tables.SingleTableMixin, FilterView):
     table_class = TicketTable
     filterset_class = TicketFilter
     template_name = "tickets/all-user-tickets.html"
-    paginate_by = 2
+    paginate_by = 20
 
     def get_queryset(self, **kwargs):
         # Override queryset method to filter tickets by authenticated user.
