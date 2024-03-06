@@ -18,4 +18,9 @@ class TicketFilter(django_filters.FilterSet):
         parent = super().qs
         author = getattr(self.request, "user", None)
 
-        return parent.filter(created_by=author)
+        # Override qs method to filter tickets based on user's role. Show user's created tickets if customer.
+        # Show all tickets if support agent or Admin
+        if self.request.user.role == 3:
+            return parent.filter(created_by=author)
+        elif self.request.user.role == 1 or self.request.user.role == 2:
+            return parent
