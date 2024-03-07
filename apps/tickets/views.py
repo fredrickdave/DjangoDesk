@@ -21,7 +21,14 @@ class AllTickets(LoginRequiredMixin, tables.SingleTableMixin, FilterView):
     def get_queryset(self, **kwargs):
         # Override queryset method to filter tickets by authenticated user.
         qs = super().get_queryset(**kwargs)
-        self.filterset = TicketFilter(data=self.request.GET, queryset=qs.order_by("-created_at"), request=self.request)
+        if self.request.user.role == 3:
+            self.filterset = TicketFilter(
+                data=self.request.GET, queryset=qs.order_by("-created_at"), request=self.request
+            )
+        elif self.request.user.role == 1 or self.request.user.role == 2:
+            self.filterset = TicketFilter(
+                data=self.request.GET, queryset=qs.order_by("assigned_agent", "-created_at"), request=self.request
+            )
         return self.filterset.qs
 
     def get_template_names(self):
