@@ -42,14 +42,6 @@ class Reference(models.Model):
         return f"{prefix}-{suffix}"
 
 
-class TicketActivity(BaseModel):
-    activity = models.TextField()
-    created_by = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name="ticket_activities")
-
-    def __str__(self) -> str:
-        return self.activity
-
-
 class Ticket(BaseModel):
     class Status(models.IntegerChoices):
         OPEN = 1, "Open"
