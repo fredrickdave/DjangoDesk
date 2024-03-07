@@ -1,0 +1,76 @@
+<div class="row mt-4">
+
+  <div class="col-lg-12">
+    <h5 class="card-title">Here are your active tickets:</h5>
+  </div>
+  <div class="col-lg-3">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Open Tickets</h5>
+        <ul class="list-unstyled">
+          <li class="fs-3 fw-semibold">{{ open_count }}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-3">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Assigned Tickets</h5>
+        <ul class="list-unstyled">
+          <li class="fs-3 fw-semibold">{{ assigned_count }}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-lg-3">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">In-Progress Tickets</h5>
+        <ul class="list-unstyled">
+          <li class="fs-3 fw-semibold">{{ in_progress_count }}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  
+</div>
+  
+<div class="row">
+  
+  <div class="col-lg-3">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">On Hold Tickets</h5>
+        <ul class="list-unstyled">
+          <li class="fs-3 fw-semibold">{{ on_hold_count }}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-lg-3">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Closed Tickets</h5>
+        <ul class="list-unstyled">
+          <li class="fs-3 fw-semibold">{{ closed_count }}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-lg-3">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Resolved Tickets</h5>
+        <ul class="list-unstyled">
+          <li class="fs-3 fw-semibold">{{ resolved_count }}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>

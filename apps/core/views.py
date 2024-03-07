@@ -28,6 +28,7 @@ def dashboard(request):
         "on_hold_count": on_hold_count,
         "resolved_count": resolved_count,
         "closed_count": closed_count,
+        "on_work_total": assigned_count + in_progress_count + on_hold_count,
         "page": "dashboard",
     }
     return render(request=request, template_name="core/dashboard.html", context=context)
