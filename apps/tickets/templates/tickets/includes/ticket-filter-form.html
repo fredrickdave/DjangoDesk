@@ -49,6 +49,22 @@
               </div>
             </div>
 
+            {% if request.user.role != 3 %}
+              <div class="col-lg-2 col-md-12">
+                <div class="form-floating">
+                  {% render_field filter_form.created_by class="form-control" id="floatingTicket" placeholder="Created By" %}
+                  <label for="floatingTicket">Created By</label>
+                </div>
+              </div>
+            {% endif %}
+
+            <div class="col-lg-2 col-md-12">
+              <div class="form-floating">
+                {% render_field filter_form.assigned_agent class="form-control" id="floatingTicket" placeholder="Assigned Agent" %}
+                <label for="floatingTicket">Assigned Agent</label>
+              </div>
+            </div>
+
             <div class="col-lg-4 col-md-12">
                 <button type="submit" class="btn btn-primary btn-sm p-3" name="ticket-filter">Submit</button>
                 <button type="reset" class="btn btn-secondary btn-sm p-3">Reset</button>
