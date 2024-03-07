@@ -54,7 +54,7 @@
             <h6>{{ request.user.get_full_name }}</h6>
             <span>
               {% if request.user.job %}
-              {{request.user.job}}
+              {{ request.user.get_role_display }}
               {% endif %}
             </span>
           </li>
@@ -65,7 +65,7 @@
           <li>
             <a
               class="dropdown-item d-flex align-items-center"
-              href="users-profile.html"
+              href="{% url "profile" %}"
             >
               <i class="bi bi-person"></i>
               <span>My Profile</span>
@@ -78,7 +78,7 @@
           <li>
             <a
               class="dropdown-item d-flex align-items-center"
-              href="users-profile.html"
+              href="{% url "profile" %}"
             >
               <i class="bi bi-gear"></i>
               <span>Account Settings</span>
@@ -91,7 +91,7 @@
           <li>
             <a
               class="dropdown-item d-flex align-items-center"
-              href="pages-faq.html"
+              href="#"
             >
               <i class="bi bi-question-circle"></i>
               <span>Need Help?</span>
@@ -129,20 +129,12 @@
     <!-- End Dashboard Nav -->
 
     <li class="nav-item">
-      <a class="nav-link {% if page != "ticket" %}collapsed{% endif %}" href="{% url "all-tickets" %}">
+      <a class="nav-link {% if page != "all-tickets" %}collapsed{% endif %}" href="{% url "all-tickets" %}">
         <i class="bi bi-ticket"></i>
-        <span>Tickets</span>
+        <span>My Tickets</span>
       </a>
     </li>
     <!-- End Tickets Nav -->
-
-    <li class="nav-item">
-      <a class="nav-link collapsed" href="index.html">
-        <i class="bi bi-clock-history"></i>
-        <span>History</span>
-      </a>
-    </li>
-    <!-- End History Nav -->
 
     <li class="nav-item">
       <a class="nav-link {% if page != "profile" %}collapsed{% endif %}" href="{% url "profile" %}">
@@ -153,7 +145,7 @@
     <!-- End Account Nav -->
 
     <li class="nav-item">
-      <a class="nav-link collapsed" href="#settings" data-toggle="tab">
+      <a class="nav-link collapsed" href="{% url "profile" %}">
         <i class="bi bi-gear"></i>
         <span>Settings</span>
       </a>
@@ -163,15 +155,15 @@
     <li class="nav-heading mt-5">Quick Links</li>
 
     <li class="nav-item">
-      <a class="nav-link {% if page != "new-ticket" %}collapsed{% endif %}" href="pages-register.html">
-        <i class="bi bi-plus-square"></i>
+      <a class="nav-link {% if page != "new-ticket" %}collapsed{% endif %}" href="{% url "create-ticket" %}">
+        <i class="bi bi-pencil-square"></i>
         <span>New Ticket</span>
       </a>
     </li>
     <!-- End New Ticket Page Nav -->
 
     <li class="nav-item">
-      <a class="nav-link collapsed" href="pages-faq.html">
+      <a class="nav-link collapsed" href="#">
         <i class="bi bi-question-circle"></i>
         <span>F.A.Q</span>
       </a>
@@ -179,7 +171,7 @@
     <!-- End F.A.Q Page Nav -->
 
     <li class="nav-item">
-      <a class="nav-link collapsed" href="pages-contact.html">
+      <a class="nav-link collapsed" href="#">
         <i class="bi bi-envelope"></i>
         <span>Contact</span>
       </a>
@@ -187,7 +179,7 @@
     <!-- End Contact Page Nav -->
 
     <li class="nav-item">
-      <a class="nav-link collapsed" href="pages-login.html">
+      <a class="nav-link collapsed" href="{% url "logout" %}">
         <i class="bi bi-box-arrow-right"></i>
         <span>Sign Out</span>
       </a>
