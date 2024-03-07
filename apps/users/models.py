@@ -63,6 +63,8 @@ class User(AbstractUser):
         CUSTOMER = 3, "Customer"
 
     username = None
+    first_name = models.CharField(max_length=150)
+    last_name = models.CharField(max_length=150)
     email = models.EmailField(unique=True)
     avatar = ResizedImageField(null=True, blank=True, size=[300, 300], keep_meta=False, upload_to="images")
     about = models.TextField(max_length=1500, blank=True)
