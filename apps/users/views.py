@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.utils.encoding import iri_to_uri
 from django.utils.http import url_has_allowed_host_and_scheme
+from django.utils.safestring import mark_safe
 
 from .forms import ChangeEmailForm, ChangePasswordForm, EditProfileForm, LoginForm, RegisterForm, TimeZoneForm
 
@@ -12,6 +13,9 @@ def sign_in(request):
     # Redirect to dashboard if user is already logged-in
     if request.user.is_authenticated:
         return redirect("dashboard")
+
+    login_form = LoginForm()
+    context = {"login_form": login_form}
 
     if request.method == "POST":
         login_form = LoginForm(request.POST)
@@ -32,11 +36,23 @@ def sign_in(request):
                 return redirect("dashboard")
             else:
                 messages.error(request=request, message="Incorrect Email or Password. Please try again.")
-                return redirect("login")
+                return render(request=request, template_name="users/login.html", context=context)
     else:
-        login_form = LoginForm()
+        messages.warning(
+            request=request,
+            message=mark_safe(
+                """For demo purposes, use the following accounts:<br/><br/>
 
-    context = {"login_form": login_form}
+                Customer Account<br/>
+                Email: <b>democustomer@demo.com</b><br/>
+                Password: <b>demo1234</b><br/><br/>
+
+                Support Agent Account<br/>
+                Email: <b>demoagent@demo.com</b><br/>
+                Password: <b>demo1234</b>"""
+            ),
+        )
+
     return render(request=request, template_name="users/login.html", context=context)
 
 
