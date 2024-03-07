@@ -15,6 +15,7 @@ class TicketTable(tables.Table):
             "summary",
             "issue_type",
             "status",
-            "created_at",
             "created_by",
+            "assigned_agent",
+            "created_at",
         )

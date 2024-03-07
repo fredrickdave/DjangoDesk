@@ -1304,11 +1304,23 @@ h6 {
 }
 
 .table-container table td:nth-child(2) {
-  width: 40%;
+  width: 30%;
 }
 
 .table-container table td:nth-child(3) {
   width: 10%;
+}
+
+.table-container table td:nth-child(4) {
+  width: 10%;
+}
+
+.table-container table td:nth-child(5) {
+  width: 10%;
+}
+
+.table-container table td:nth-child(7) {
+  width: 15%;
 }
 
 /* Progress bar */
